@@ -260,6 +260,15 @@ require("telescope").setup({
 		},
 		prompt_title = false,
 	},
+
+	pickers = {
+		lsp_document_symbols = {
+			-- Can be multiple symbols with same name, so having the preview is helpful
+			preview = {
+				hide_on_startup = false,
+			},
+		},
+	},
 })
 
 local util = require("formatter.util")
