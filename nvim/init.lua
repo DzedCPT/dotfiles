@@ -129,7 +129,6 @@ require("lazy").setup({
 		version = "2.4.1",
 		-- opts = {},
 	},
-	-- Find things
 	{
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.2",
@@ -195,6 +194,7 @@ require("lazy").setup({
 	"hrsh7th/cmp-path",
 	"hrsh7th/cmp-cmdline",
 	"hrsh7th/nvim-cmp",
+	'L3MON4D3/LuaSnip',
 })
 
 -- ================================================================================
@@ -260,7 +260,6 @@ require("telescope").setup({
 		},
 		prompt_title = false,
 	},
-
 	pickers = {
 		lsp_document_symbols = {
 			-- Can be multiple symbols with same name, so having the preview is helpful
@@ -394,8 +393,6 @@ for _, lsp in ipairs(servers) do
 						ignore = { "W391" },
 						maxLineLength = 100,
 					},
-					-- isort = { enabled = true },
-					-- rope_autoimport = { enabled = true, code_actions = { enabled = true }, completions = { enabled = false } },
 				},
 			},
 			python = {
