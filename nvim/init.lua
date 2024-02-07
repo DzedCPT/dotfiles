@@ -596,9 +596,6 @@ vim.api.nvim_create_user_command("Moon", change_theme("kanagawa-wave"), { nargs 
 
 -- Formatter keybindings
 bind("n", "<leader>ef", ":Format<Cr>")
--- TODO: Only call this on Python files!
-bind("n", "<leader>ei", ":!autoflake --in-place --remove-all-unused-imports %<Cr>")
-bind("n", "<leader>ev", ":!autoflake --in-place --remove-unused-variables %<Cr>")
 
 -- Shortcuts for copying to system clipboard, works locally and on remote servers.
 bind("n", "<leader>y", require("osc52").copy_operator, { expr = true })
