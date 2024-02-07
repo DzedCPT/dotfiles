@@ -526,8 +526,8 @@ bind("n", "<leader>o", telescope_builtin.git_files)
 bind("n", "<leader>fo", telescope_builtin.find_files)
 bind("n", "<leader>ff", telescope_builtin.live_grep)
 bind("n", "<leader>s", telescope_builtin.lsp_document_symbols)
-bind("n", "<leader>fs", telescope_builtin.grep_string)
-bind("n", "<leader>fp", telescope_builtin.resume)
+bind("n", "<leader>fj", telescope_builtin.jumplist)
+-- there are some more telescope pickers that could be helpful to configure at some point.
 
 -- Substitute keybindings
 bind("n", "s", substitute.operator, { noremap = true })
