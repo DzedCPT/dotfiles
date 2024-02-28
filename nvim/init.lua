@@ -202,7 +202,12 @@ require("lazy").setup({
 -- ================================================================================
 
 local hop = require("hop")
-hop.setup()
+hop.setup({
+	-- Define order in which should assign keys.
+	-- Keep it nice and close to the homerow.
+	keys = "jfkdhgslaeiow",
+})
+
 local substitute = require("substitute")
 substitute.setup()
 require("Comment").setup()
