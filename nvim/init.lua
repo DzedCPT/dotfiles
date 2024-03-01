@@ -194,7 +194,7 @@ require("lazy").setup({
 	"hrsh7th/cmp-path",
 	"hrsh7th/cmp-cmdline",
 	"hrsh7th/nvim-cmp",
-	'L3MON4D3/LuaSnip',
+	"L3MON4D3/LuaSnip",
 })
 
 -- ================================================================================
@@ -427,7 +427,7 @@ local cmp = require("cmp")
 cmp.setup({
 	snippet = {
 		expand = function(args)
-			require('luasnip').lsp_expand(args.body)
+			require("luasnip").lsp_expand(args.body)
 		end,
 	},
 	completion = {
