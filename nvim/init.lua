@@ -317,7 +317,12 @@ require("kanagawa").setup({
 		},
 	},
 })
+
 vim.cmd("colorscheme kanagawa-dragon")
+-- Not sure why this is required (probably has to do with plugin load sequence)
+-- but this line below is required for the neogit theme to take effect the first
+-- time you open it.
+change_theme("kanagawa-dragon")()
 
 require("lualine").setup({
 	options = {
