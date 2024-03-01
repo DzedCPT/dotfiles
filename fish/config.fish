@@ -79,9 +79,9 @@ end
 # ---------------------------------------- #
 
 function cd_fzf;
-	set -x destFolder (find . -type d -print | fzf )
-	if set -q destFolder;
-		cd $destFolder
+	set -x dest (find . -type d -print | fzf )
+	if test -n "$dest ";
+		cd $dest 
 		# Redraw prompt, doesn't happen by default, so it's unclear if the jump happened.
 		commandline -f repaint
 	end
@@ -89,7 +89,7 @@ end
 
 function history_fzf;
 	set -x cmd (history | fzf)
-	if set -q cmd;
+	if test -n "$cmd";
 		commandline -r $cmd
 	end
 end
