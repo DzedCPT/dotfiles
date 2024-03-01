@@ -15,22 +15,36 @@ export EDITOR="$VISUAL"
 #bind \cJ accept-autosuggestion execute
 #bind \cJ "cd $(find . -type d -print | fzf)"
 
-# TODO: these fzf functions should do nothing if not result is selected. ie if you ctrl+c out of fzf search box.
-function cd_fzf;
-	cd "$(find . -type d -print | fzf)"
-end
+####
+#### FZF Config
+####
 
+function cd_fzf;
+	set -x destFolder (find . -type d -print | fzf )
+	if set -q destFolder;
+		cd $destFolder
+		# Redraw prompt, doesn't happen by default, so it's unclear if the jump happened.
+		commandline -f repaint
+	end
+end
 
 function history_fzf;
-	history | fzf
+	set -x cmd (history | fzf)
+	if set -q cmd;
+		commandline -r $cmd
+	end
 end
 
-function nvim_fzf;
-	nvim "$(find . -print | fzf)"
+function fzf_open_file_in_nvim;
+	set -x dest (find . -print | fzf )
+	if set -q dest;
+		nvim $dest
+	end
 end
 
-bind \co nvim_fzf
+bind \co fzf_open_file_in_nvim
 bind \cj cd_fzf
+bind \cr history_fzf
 
 # General aliases
 alias rm='rm -r'
