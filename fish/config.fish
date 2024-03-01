@@ -192,9 +192,8 @@ set -g fish_pager_color_prefix $cyan
 set -g fish_pager_color_completion $foreground
 set -g fish_pager_color_description $comment
 
-# Prompt
-# Configure the prompt. Keeping it nice and simple
-# TODO: Would like to put a little * next to the branch name if there are uncommited changes.
+# Prompt:
+# Keeping it nice and simple
 function fish_prompt
 	
   	# Echo who I am.
@@ -213,7 +212,13 @@ function fish_prompt
 	set -l git_branch (git branch 2>/dev/null | sed -n '/\* /s///p')
 	if test "$git_branch" 
 	    set_color green
-        echo -n "($git_branch)"
+		set -x diff (git diff | head -n 1)
+    	if test -n "$diff";
+			# If there's a git diff put ~ before the branch
+        	echo -n "(~$git_branch)"
+		else
+        	echo -n "($git_branch)"
+		end
 	end
 
 	# Conda env stuff
