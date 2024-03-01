@@ -96,8 +96,11 @@ end
 
 function fzf_open_file_in_nvim;
 	set -x dest (find . -print | fzf )
-	if set -q dest;
+	if test -n "$dest";
 		nvim $dest
+	else
+		# Not sure why this needed by you get a hanging cursor without it.
+		commandline -f repaint
 	end
 end
 
