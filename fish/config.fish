@@ -1,23 +1,82 @@
+# ---------------------------------------- #
+#        General Fish Config               #
+# ---------------------------------------- #
+
 # Get rid of the fish greeting.
 function fish_greeting
 end
 
-# TODO: Add keybinding to open current line in vim to edit.
-#TODO: setup autojump
+# ---------------------------------------- #
+#              Env                         #
+# ---------------------------------------- #
 
-# Env vars
 source ~/.config/env.fish
 export VISUAL=nvim
 export EDITOR="$VISUAL"
+set OS $(uname)
 
-# Keybindings
-# bind \cH kill-whole-line
-#bind \cJ accept-autosuggestion execute
-#bind \cJ "cd $(find . -type d -print | fzf)"
+# Not sure if this make any difference tbh
+if test "$OS" = "Linux"
+	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+end
 
-####
-#### FZF Config
-####
+# Update PATH for the Google Cloud SDK.
+if [ -f '/Users/me/google-cloud-sdk/path.fish.inc' ]; . '/Users/me/google-cloud-sdk/path.fish.inc'; end
+
+if test "$OS" = "Linux"
+	# Linus specific config
+    eval /home/jed/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+else if test "$OS" = "Darwin"
+	# Mac specific config
+    eval /Users/me/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+end
+
+# ---------------------------------------- #
+#          General Aliases                 #
+# ---------------------------------------- #
+
+# Function to edit command in nvim
+function edit_cmd --description 'Input command in external editor'
+    set -l f (mktemp /tmp/fish.cmd.XXXXXXXX)
+    if test -n "$f"
+        set -l p (commandline -C)
+        commandline -b > $f
+        nvim -c 'set ft=fish' $f
+        commandline -r (more $f)
+        commandline -C $p
+        command rm $f
+    end
+end
+
+alias rm='rm -r'
+alias cp='cp -r'
+alias mkdir='mkdir -p'
+alias vi='nvim'
+alias vim='nvim'
+alias nspeed="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
+alias dspace="sudo du -hsx /* | sort -rh | head -n 40"
+alias node-pools="gcloud container node-pools list --cluster=ponos-cluster --location=europe-west4-a | cut -f1 -d' '"
+bind \cV 'edit_cmd'
+alias klog='tail -f /var/log/kern.log'
+
+function vm; 
+	set cmd $argv[1]
+	if test "$cmd" = "ls";
+		gcloud compute instances list;
+	else if test "$cmd" = "start"
+		gcloud compute instances start $(gcloud compute instances list | fzf | cut -d ' ' -f1);
+	else if test "$cmd" = "stop"
+		gcloud compute instances stop $(gcloud compute instances list | fzf | cut -d ' ' -f1);
+	else if test "$cmd" = "ssh"
+		gcloud compute ssh jed@$(gcloud compute instances list | fzf | cut -d ' ' -f1);
+	else
+		echo "Unkown cmd: $cmd"
+	end
+end
+
+# ---------------------------------------- #
+#                 FZF                      #
+# ---------------------------------------- #
 
 function cd_fzf;
 	set -x destFolder (find . -type d -print | fzf )
@@ -46,10 +105,9 @@ bind \co fzf_open_file_in_nvim
 bind \cj cd_fzf
 bind \cr history_fzf
 
-# General aliases
-alias rm='rm -r'
-alias cp='cp -r'
-alias mkdir='mkdir -p'
+# ---------------------------------------- #
+#                 Git Config               #
+# ---------------------------------------- #
 
 # Git aliases
 alias g='git'
@@ -60,8 +118,6 @@ alias ga='git add'
 alias gl='git log'
 alias gm='git merge'
 alias gd='git diff'
-# alias gco='git checkout'
-# Alias for activating env
 function gco
 	if test (count $argv) -lt 1; or test $argv[1] = "--help"
 		# | xargs just strips the whitespaces.
@@ -82,9 +138,9 @@ function rgbd;
 	git branch -D $(string trim $(git branch --list $argv[1]))
 end
 
-alias vi='nvim'
-alias vim='nvim'
-alias p='python'
+# ---------------------------------------- #
+#              Docker Config               #
+# ---------------------------------------- #
 
 # Docker aliases
 #Avoid having to type sudo the entire time.
@@ -94,7 +150,9 @@ alias di_rm='sudo docker rmi -f (docker images -aq)'
 # Remove all docker containers.
 alias dc_rm='sudo docker rm -vf (docker ps -aq)'
 
-alias lsp='pip install python-lsp-server[all] black'
+# ---------------------------------------- #
+#                Apperance                 #
+# ---------------------------------------- #
 
 # Kanagawa Fish shell theme
 # Thanks: https://github.com/rebelot/kanagawa.nvim/blob/master/extras/kanagawa.fish
@@ -131,12 +189,12 @@ set -g fish_pager_color_prefix $cyan
 set -g fish_pager_color_completion $foreground
 set -g fish_pager_color_description $comment
 
-
-
+# Prompt
 # Configure the prompt. Keeping it nice and simple
 # TODO: Would like to put a little * next to the branch name if there are uncommited changes.
 function fish_prompt
 	
+  	# Echo who I am.
 	set_color purple
 	if test "$OS" = "Linux"
 		echo -n "$hostname:"
@@ -149,7 +207,6 @@ function fish_prompt
 	echo -n (basename $PWD)
 
 	# Git status stuff
-	# TOOD: Would be cool if this changed colours based on the git status.
 	set -l git_branch (git branch 2>/dev/null | sed -n '/\* /s///p')
 	if test "$git_branch" 
 	    set_color green
@@ -161,54 +218,24 @@ function fish_prompt
 		set_color C4746E 
 		echo -n "[$CONDA_DEFAULT_ENV]"
 	end
-	# Print new line
-	echo
 
+	# Put cmd on the line below:
 	set_color normal
+	echo
     echo -n "> "
 
 end
 
-# Conda init
+# ---------------------------------------- #
+#                Python                    #
+# ---------------------------------------- #
 
-# Update PATH for the Google Cloud SDK.
-if [ -f '/Users/me/google-cloud-sdk/path.fish.inc' ]; . '/Users/me/google-cloud-sdk/path.fish.inc'; end
+# Conda
+# Prevent conda from automatically loading an env on login.
+conda config --set auto_activate_base False
+# Prevent conda from putting the env name on the end of the prompt line.
+conda config --set changeps1 False
 
-set OS $(uname)
-
-if test "$OS" = "Linux"
-	# Linus specific config
-	alias klog='tail -f /var/log/kern.log'
-    eval /home/jed/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-else if test "$OS" = "Darwin"
-	# Mac specific config
-    eval /Users/me/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-end
-
-alias nspeed="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
-# How much disk space left?
-alias dspace="sudo du -hsx /* | sort -rh | head -n 40"
-
-
-alias node-pools="gcloud container node-pools list --cluster=ponos-cluster --location=europe-west4-a | cut -f1 -d' '"
-
-function vm; 
-	set cmd $argv[1]
-	if test "$cmd" = "ls";
-		gcloud compute instances list;
-	else if test "$cmd" = "start"
-		gcloud compute instances start $(gcloud compute instances list | fzf | cut -d ' ' -f1);
-	else if test "$cmd" = "stop"
-		gcloud compute instances stop $(gcloud compute instances list | fzf | cut -d ' ' -f1);
-	else if test "$cmd" = "ssh"
-		gcloud compute ssh jed@$(gcloud compute instances list | fzf | cut -d ' ' -f1);
-	else
-		echo "Unkown cmd: $cmd"
-	end
-end
-
-# Alias for jumping to a file.
-alias gt ='cd $(find . -type d -print | fzf)'
 # Alias for activating env
 function activate
 	if test (count $argv) -lt 1; or test $argv[1] = "--help"
@@ -219,38 +246,7 @@ function activate
   end
 alias deactivate="conda deactivate"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-# <<< conda initialize <<<
-
-# Prevent conda from automatically loading an env on login.
-conda config --set auto_activate_base False
-# Prevent conda from putting the env name on the end of the prompt line.
-conda config --set changeps1 False
-
-if test "$OS" = "Linux"
-	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-end
-
-# Not sure if this make any difference tbh
-
-# Function to edit command in nvim
-function edit_cmd --description 'Input command in external editor'
-        set -l f (mktemp /tmp/fish.cmd.XXXXXXXX)
-        if test -n "$f"
-            set -l p (commandline -C)
-            commandline -b > $f
-            nvim -c 'set ft=fish' $f
-            commandline -r (more $f)
-            commandline -C $p
-            command rm $f
-        end
-    end
-
-bind \cV 'edit_cmd'
-
-
-
+# Python utils
 function py; 
 	set cmd $argv[1]
 	if test "$cmd" = "lsp";
@@ -264,5 +260,4 @@ function py;
 		python $argv
 	end
 end
-
 
