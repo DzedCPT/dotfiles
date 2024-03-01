@@ -96,12 +96,6 @@ alias dc_rm='sudo docker rm -vf (docker ps -aq)'
 
 alias lsp='pip install python-lsp-server[all] black'
 
-# The next line updates PATH for the Google Cloud SDK.
-# TODO this shouldn't point to Downloads.
-if [ -f '/home/dzedcpt/Downloads/google-cloud-sdk/path.fish.inc' ]; . '/home/dzedcpt/Downloads/google-cloud-sdk/path.fish.inc'; end
-
-
-
 # Kanagawa Fish shell theme
 # A template was taken and modified from Tokyonight:
 # https://github.com/folke/tokyonight.nvim/blob/main/extras/fish_tokyonight_night.fish
