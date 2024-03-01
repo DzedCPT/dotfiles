@@ -257,6 +257,8 @@ function py;
 		pip install python-lsp-server black isort
 	else if test "$cmd" = "clean"
 		pip freeze | grep -v "^-e" | xargs pip uninstall -y
+	else if test "$cmd" = "ps"
+		ps -ef | grep python
 	else
 		# By default just run the python command.
 		python $argv
