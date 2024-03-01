@@ -100,19 +100,6 @@ alias lsp='pip install python-lsp-server[all] black'
 # TODO this shouldn't point to Downloads.
 if [ -f '/home/dzedcpt/Downloads/google-cloud-sdk/path.fish.inc' ]; . '/home/dzedcpt/Downloads/google-cloud-sdk/path.fish.inc'; end
 
-# TODO setup command line fzf
-# should work for finding directories and for searching through history
-# TODO install exa
-if command -v exa > /dev/null
-	abbr -a l 'exa'
-	abbr -a ls 'exa'
-	abbr -a ll 'exa -l'
-	abbr -a lll 'exa -la'
-else
-	abbr -a l 'ls'
-	abbr -a ll 'ls -l'
-	abbr -a lll 'ls -la'
-end
 
 
 # Kanagawa Fish shell theme
