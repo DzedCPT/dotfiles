@@ -525,10 +525,13 @@ bind("n", "<leader>b", function()
 	telescope_builtin.buffers({ ignore_current_buffer = true, sort_lastused = true })
 end)
 bind("n", "<leader>o", telescope_builtin.git_files)
+bind("n", "<leader>s", telescope_builtin.lsp_document_symbols)
 bind("n", "<leader>fo", telescope_builtin.find_files)
 bind("n", "<leader>ff", telescope_builtin.live_grep)
 bind("n", "<leader>s", telescope_builtin.lsp_document_symbols)
 bind("n", "<leader>fj", telescope_builtin.jumplist)
+bind("n", "<leader>fs", telescope_builtin.grep_string)
+bind("n", "<leader>fp", telescope_builtin.resume)
 -- there are some more telescope pickers that could be helpful to configure at some point.
 
 -- Substitute keybindings

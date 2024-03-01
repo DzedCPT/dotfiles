@@ -256,6 +256,17 @@ function edit_cmd --description 'Input command in external editor'
 bind \cV 'edit_cmd'
 
 
-alias pylsp='pip install python-lsp-server black isort'
+
+function py; 
+	set cmd $argv[1]
+	if test "$cmd" = "lsp";
+		pip install python-lsp-server black isort
+	else if test "$cmd" = "clean"
+		pip freeze | grep -v "^-e" | xargs pip uninstall -y
+	else
+		# By default just run the python command.
+		python $argv
+	end
+end
 
 
