@@ -97,8 +97,7 @@ alias dc_rm='sudo docker rm -vf (docker ps -aq)'
 alias lsp='pip install python-lsp-server[all] black'
 
 # Kanagawa Fish shell theme
-# A template was taken and modified from Tokyonight:
-# https://github.com/folke/tokyonight.nvim/blob/main/extras/fish_tokyonight_night.fish
+# Thanks: https://github.com/rebelot/kanagawa.nvim/blob/master/extras/kanagawa.fish
 set -l foreground c5c9c5 normal
 set -l selection 2D4F67 brcyan
 set -l comment a6a69c brblack
