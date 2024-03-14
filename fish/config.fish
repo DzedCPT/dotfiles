@@ -44,10 +44,17 @@ alias gc='git commit -v'
 alias gb='git branch'
 alias ga='git add'
 alias gl='git log'
-alias gm='git merge'
 alias gd='git diff'
-# alias gco='git checkout'
-# Alias for activating env
+function gm
+	if test (count $argv) -lt 1; or test $argv[1] = "--help"
+		# | xargs just strips the whitespaces.
+		git merge (git branch | fzf | sed s/\*// | xargs)
+
+	else
+		git merge $argv
+	end
+end
+
 function gco
 	if test (count $argv) -lt 1; or test $argv[1] = "--help"
 		# | xargs just strips the whitespaces.
