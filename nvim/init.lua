@@ -194,7 +194,7 @@ require("lazy").setup({
 	"hrsh7th/cmp-path",
 	"hrsh7th/cmp-cmdline",
 	"hrsh7th/nvim-cmp",
-	'L3MON4D3/LuaSnip',
+	"L3MON4D3/LuaSnip",
 })
 
 -- ================================================================================
@@ -317,7 +317,12 @@ require("kanagawa").setup({
 		},
 	},
 })
+
 vim.cmd("colorscheme kanagawa-dragon")
+-- Not sure why this is required (probably has to do with plugin load sequence)
+-- but this line below is required for the neogit theme to take effect the first
+-- time you open it.
+change_theme("kanagawa-dragon")()
 
 require("lualine").setup({
 	options = {
@@ -422,7 +427,7 @@ local cmp = require("cmp")
 cmp.setup({
 	snippet = {
 		expand = function(args)
-			require('luasnip').lsp_expand(args.body)
+			require("luasnip").lsp_expand(args.body)
 		end,
 	},
 	completion = {

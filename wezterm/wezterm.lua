@@ -15,7 +15,9 @@ function kanagawa_colors(variant)
 			foreground = "#c5c9c5",
 			background = "#181616",
 
-			cursor_bg = "#c8c093",
+			-- Make the cursor some crazy colour to make  it easier to find
+			-- If you want to revert the original theme make it: "#c8c093",
+			cursor_bg = "#41FDFE",
 			cursor_fg = "#c8c093",
 			cursor_border = "#c8c093",
 
@@ -44,7 +46,9 @@ function kanagawa_colors(variant)
 			foreground = "#545464",
 			background = "#f2ecbc",
 
-			cursor_bg = "#c8c093",
+			-- Make the cursor some crazy colour to make  it easier to find
+			-- If you want to revert the original theme make it: "#c8c093",
+			cursor_bg = "#41FDFE",
 			cursor_fg = "#c8c093",
 			cursor_border = "#c8c093",
 

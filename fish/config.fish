@@ -1,41 +1,116 @@
+# ---------------------------------------- #
+#        General Fish Config               #
+# ---------------------------------------- #
+
 # Get rid of the fish greeting.
 function fish_greeting
 end
 
-# TODO: Add keybinding to open current line in vim to edit.
-#TODO: setup autojump
+# ---------------------------------------- #
+#              Env                         #
+# ---------------------------------------- #
 
-# Env vars
 source ~/.config/env.fish
 export VISUAL=nvim
 export EDITOR="$VISUAL"
+set OS $(uname)
 
-# Keybindings
-# bind \cH kill-whole-line
-#bind \cJ accept-autosuggestion execute
-#bind \cJ "cd $(find . -type d -print | fzf)"
-
-# TODO: these fzf functions should do nothing if not result is selected. ie if you ctrl+c out of fzf search box.
-function cd_fzf;
-	cd "$(find . -type d -print | fzf)"
+# Not sure if this make any difference tbh
+if test "$OS" = "Linux"
+	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 end
 
+# Update PATH for the Google Cloud SDK.
+if [ -f '/Users/me/google-cloud-sdk/path.fish.inc' ]; . '/Users/me/google-cloud-sdk/path.fish.inc'; end
 
-function history_fzf;
-	history | fzf
+if test "$OS" = "Linux"
+	# Linus specific config
+    eval /home/jed/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+else if test "$OS" = "Darwin"
+	# Mac specific config
+    eval /Users/me/miniconda3/bin/conda "shell.fish" "hook" $argv | source
 end
 
-function nvim_fzf;
-	nvim "$(find . -print | fzf)"
+# ---------------------------------------- #
+#          General Aliases                 #
+# ---------------------------------------- #
+
+# Function to edit command in nvim
+function edit_cmd --description 'Input command in external editor'
+    set -l f (mktemp /tmp/fish.cmd.XXXXXXXX)
+    if test -n "$f"
+        set -l p (commandline -C)
+        commandline -b > $f
+        nvim -c 'set ft=fish' $f
+        commandline -r (more $f)
+        commandline -C $p
+        command rm $f
+    end
 end
 
-bind \co nvim_fzf
-bind \cj cd_fzf
-
-# General aliases
 alias rm='rm -r'
 alias cp='cp -r'
 alias mkdir='mkdir -p'
+alias vi='nvim'
+alias vim='nvim'
+alias nspeed="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
+alias dspace="sudo du -hsx /* | sort -rh | head -n 40"
+alias node-pools="gcloud container node-pools list --cluster=ponos-cluster --location=europe-west4-a | cut -f1 -d' '"
+bind \cV 'edit_cmd'
+alias klog='tail -f /var/log/kern.log'
+
+function vm; 
+	set cmd $argv[1]
+	if test "$cmd" = "ls";
+		gcloud compute instances list;
+	else if test "$cmd" = "start"
+		gcloud compute instances start $(gcloud compute instances list | fzf | cut -d ' ' -f1);
+	else if test "$cmd" = "stop"
+		gcloud compute instances stop $(gcloud compute instances list | fzf | cut -d ' ' -f1);
+	else if test "$cmd" = "ssh"
+		gcloud compute ssh jed@$(gcloud compute instances list | fzf | cut -d ' ' -f1);
+	else
+		echo "Unkown cmd: $cmd"
+	end
+end
+
+# ---------------------------------------- #
+#                 FZF                      #
+# ---------------------------------------- #
+
+function cd_fzf;
+	set -x dest (find . -type d -print | fzf )
+	if test -n "$dest ";
+		cd $dest 
+		# Redraw prompt, doesn't happen by default, so it's unclear if the jump happened.
+		commandline -f repaint
+	end
+end
+
+function history_fzf;
+	set -x cmd (history | fzf)
+	if test -n "$cmd";
+		commandline -r $cmd
+	end
+end
+
+function fzf_open_file_in_nvim;
+	set -x dest (find . -print | fzf )
+	if test -n "$dest";
+		nvim $dest
+	else
+		# Not sure why this needed by you get a hanging cursor without it.
+		commandline -f repaint
+	end
+end
+
+bind \co fzf_open_file_in_nvim
+bind \cj cd_fzf
+bind \cr history_fzf
+
+# ---------------------------------------- #
+#                 Git Config               #
+# ---------------------------------------- #
 
 # Git aliases
 alias g='git'
@@ -75,9 +150,9 @@ function rgbd;
 	git branch -D $(string trim $(git branch --list $argv[1]))
 end
 
-alias vi='nvim'
-alias vim='nvim'
-alias p='python'
+# ---------------------------------------- #
+#              Docker Config               #
+# ---------------------------------------- #
 
 # Docker aliases
 #Avoid having to type sudo the entire time.
@@ -87,30 +162,12 @@ alias di_rm='sudo docker rmi -f (docker images -aq)'
 # Remove all docker containers.
 alias dc_rm='sudo docker rm -vf (docker ps -aq)'
 
-alias lsp='pip install python-lsp-server[all] black'
-
-# The next line updates PATH for the Google Cloud SDK.
-# TODO this shouldn't point to Downloads.
-if [ -f '/home/dzedcpt/Downloads/google-cloud-sdk/path.fish.inc' ]; . '/home/dzedcpt/Downloads/google-cloud-sdk/path.fish.inc'; end
-
-# TODO setup command line fzf
-# should work for finding directories and for searching through history
-# TODO install exa
-if command -v exa > /dev/null
-	abbr -a l 'exa'
-	abbr -a ls 'exa'
-	abbr -a ll 'exa -l'
-	abbr -a lll 'exa -la'
-else
-	abbr -a l 'ls'
-	abbr -a ll 'ls -l'
-	abbr -a lll 'ls -la'
-end
-
+# ---------------------------------------- #
+#                Apperance                 #
+# ---------------------------------------- #
 
 # Kanagawa Fish shell theme
-# A template was taken and modified from Tokyonight:
-# https://github.com/folke/tokyonight.nvim/blob/main/extras/fish_tokyonight_night.fish
+# Thanks: https://github.com/rebelot/kanagawa.nvim/blob/master/extras/kanagawa.fish
 set -l foreground c5c9c5 normal
 set -l selection 2D4F67 brcyan
 set -l comment a6a69c brblack
@@ -144,12 +201,11 @@ set -g fish_pager_color_prefix $cyan
 set -g fish_pager_color_completion $foreground
 set -g fish_pager_color_description $comment
 
-
-
-# Configure the prompt. Keeping it nice and simple
-# TODO: Would like to put a little * next to the branch name if there are uncommited changes.
+# Prompt:
+# Keeping it nice and simple
 function fish_prompt
 	
+  	# Echo who I am.
 	set_color purple
 	if test "$OS" = "Linux"
 		echo -n "$hostname:"
@@ -162,11 +218,16 @@ function fish_prompt
 	echo -n (basename $PWD)
 
 	# Git status stuff
-	# TOOD: Would be cool if this changed colours based on the git status.
 	set -l git_branch (git branch 2>/dev/null | sed -n '/\* /s///p')
 	if test "$git_branch" 
 	    set_color green
-        echo -n "($git_branch)"
+		set -x diff (git diff | head -n 1)
+    	if test -n "$diff";
+			# If there's a git diff put ~ before the branch
+        	echo -n "(~$git_branch)"
+		else
+        	echo -n "($git_branch)"
+		end
 	end
 
 	# Conda env stuff
@@ -174,54 +235,24 @@ function fish_prompt
 		set_color C4746E 
 		echo -n "[$CONDA_DEFAULT_ENV]"
 	end
-	# Print new line
-	echo
 
+	# Put cmd on the line below:
 	set_color normal
+	echo
     echo -n "> "
 
 end
 
-# Conda init
+# ---------------------------------------- #
+#                Python                    #
+# ---------------------------------------- #
 
-# Update PATH for the Google Cloud SDK.
-if [ -f '/Users/me/google-cloud-sdk/path.fish.inc' ]; . '/Users/me/google-cloud-sdk/path.fish.inc'; end
+# Conda
+# Prevent conda from automatically loading an env on login.
+conda config --set auto_activate_base False
+# Prevent conda from putting the env name on the end of the prompt line.
+conda config --set changeps1 False
 
-set OS $(uname)
-
-if test "$OS" = "Linux"
-	# Linus specific config
-	alias klog='tail -f /var/log/kern.log'
-    eval /home/jed/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-else if test "$OS" = "Darwin"
-	# Mac specific config
-    eval /Users/me/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-end
-
-alias nspeed="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
-# How much disk space left?
-alias dspace="sudo du -hsx /* | sort -rh | head -n 40"
-
-
-alias node-pools="gcloud container node-pools list --cluster=ponos-cluster --location=europe-west4-a | cut -f1 -d' '"
-
-function vm; 
-	set cmd $argv[1]
-	if test "$cmd" = "ls";
-		gcloud compute instances list;
-	else if test "$cmd" = "start"
-		gcloud compute instances start $(gcloud compute instances list | fzf | cut -d ' ' -f1);
-	else if test "$cmd" = "stop"
-		gcloud compute instances stop $(gcloud compute instances list | fzf | cut -d ' ' -f1);
-	else if test "$cmd" = "ssh"
-		gcloud compute ssh jed@$(gcloud compute instances list | fzf | cut -d ' ' -f1);
-	else
-		echo "Unkown cmd: $cmd"
-	end
-end
-
-# Alias for jumping to a file.
-alias gt ='cd $(find . -type d -print | fzf)'
 # Alias for activating env
 function activate
 	if test (count $argv) -lt 1; or test $argv[1] = "--help"
@@ -232,48 +263,18 @@ function activate
   end
 alias deactivate="conda deactivate"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-# <<< conda initialize <<<
-
-# Prevent conda from automatically loading an env on login.
-conda config --set auto_activate_base False
-# Prevent conda from putting the env name on the end of the prompt line.
-conda config --set changeps1 False
-
-if test "$OS" = "Linux"
-	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-end
-
-# Not sure if this make any difference tbh
-
-# Function to edit command in nvim
-function edit_cmd --description 'Input command in external editor'
-        set -l f (mktemp /tmp/fish.cmd.XXXXXXXX)
-        if test -n "$f"
-            set -l p (commandline -C)
-            commandline -b > $f
-            nvim -c 'set ft=fish' $f
-            commandline -r (more $f)
-            commandline -C $p
-            command rm $f
-        end
-    end
-
-bind \cV 'edit_cmd'
-
-
-
+# Python utils
 function py; 
 	set cmd $argv[1]
 	if test "$cmd" = "lsp";
 		pip install python-lsp-server black isort
 	else if test "$cmd" = "clean"
 		pip freeze | grep -v "^-e" | xargs pip uninstall -y
+	else if test "$cmd" = "ps"
+		ps -ef | grep python
 	else
 		# By default just run the python command.
 		python $argv
 	end
 end
-
 
