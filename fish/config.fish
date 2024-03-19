@@ -55,6 +55,7 @@ alias vi='nvim'
 alias vim='nvim'
 alias nspeed="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
 alias dspace="sudo du -hsx /* | sort -rh | head -n 40"
+alias sz="du -sh */ | sort -h"
 alias node-pools="gcloud container node-pools list --cluster=ponos-cluster --location=europe-west4-a | cut -f1 -d' '"
 bind \cV 'edit_cmd'
 alias klog='tail -f /var/log/kern.log'
