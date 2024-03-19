@@ -503,8 +503,8 @@ bind("i", "<c-l>", "<esc>:noh<Cr>li")
 bind("n", "<c-l>", ":noh<Cr>")
 
 -- Jump to previous/next location
-bind("n", "[j", "<c-o>")
-bind("n", "]j", "<c-i>")
+bind("n", "[j", "<c-o>zz")
+bind("n", "]j", "<c-i>zz")
 
 -- ================================================================================
 -- Extension Keybindings
