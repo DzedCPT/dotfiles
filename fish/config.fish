@@ -60,6 +60,7 @@ bind \cV 'edit_cmd'
 alias klog='tail -f /var/log/kern.log'
 
 function vm; 
+	# TODO: This shouldn't log an error if you ctrl-c out of fzf
 	set cmd $argv[1]
 	if test "$cmd" = "ls";
 		gcloud compute instances list;
