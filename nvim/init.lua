@@ -108,6 +108,8 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 	-- Basic util plugins
+	-- Add surround actions
+	"echasnovski/mini.surround",
 	-- Need this for copying text from remotes to local clipboard
 	"ojroques/nvim-osc52",
 	-- Subsitute text plugin
@@ -200,6 +202,51 @@ require("lazy").setup({
 -- ================================================================================
 -- Configure Plugins
 -- ================================================================================
+
+require("mini.surround").setup(
+	-- This is the default config, but I changed the mappings.
+	-- No need to copy this inside `setup()`. Will be used automatically.
+	{
+		-- Add custom surroundings to be used on top of builtin ones. For more
+		-- information with examples, see `:h MiniSurround.config`.
+		custom_surroundings = nil,
+
+		-- Duration (in ms) of highlight when calling `MiniSurround.highlight()`
+		highlight_duration = 500,
+
+		-- Module mappings. Use `''` (empty string) to disable one.
+		mappings = {
+			-- Not convinced these are the best shortcuts.
+			add = "<C-a>i", -- Add surrounding in Normal and Visual modes
+			delete = "<C-a>d", -- Delete surrounding
+			replace = "<C-a>r", -- Replace surrounding
+			find = "", -- Find surrounding (to the right)
+			find_left = "", -- Find surrounding (to the left)
+			highlight = "", -- Highlight surrounding
+			update_n_lines = "", -- Update `n_lines`
+
+			suffix_last = "", -- Suffix to search with "prev" method
+			suffix_next = "", -- Suffix to search with "next" method
+		},
+
+		-- Number of lines within which surrounding is searched
+		n_lines = 20,
+
+		-- Whether to respect selection type:
+		-- - Place surroundings on separate lines in linewise mode.
+		-- - Place surroundings on each line in blockwise mode.
+		respect_selection_type = false,
+
+		-- How to search for surrounding (first inside current line, then inside
+		-- neighborhood). One of 'cover', 'cover_or_next', 'cover_or_prev',
+		-- 'cover_or_nearest', 'next', 'prev', 'nearest'. For more details,
+		-- see `:h MiniSurround.config`.
+		search_method = "cover",
+
+		-- Whether to disable showing non-error feedback
+		silent = false,
+	}
+)
 
 local hop = require("hop")
 hop.setup({
