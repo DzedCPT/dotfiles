@@ -122,6 +122,7 @@ alias gb='git branch'
 alias ga='git add'
 alias gl='git log'
 alias gd='git diff'
+alias gclean='git branch | grep -v "main" | xargs git branch -D'
 function gm
 	if test (count $argv) -lt 1; or test $argv[1] = "--help"
 		# | xargs just strips the whitespaces.
