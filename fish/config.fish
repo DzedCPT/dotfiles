@@ -156,9 +156,6 @@ end
 #              Docker Config               #
 # ---------------------------------------- #
 
-# Docker aliases
-#Avoid having to type sudo the entire time.
-alias docker='sudo docker'
 # Remove all docker images.
 alias di_rm='sudo docker rmi -f (docker images -aq)'
 # Remove all docker containers.
