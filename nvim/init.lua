@@ -559,9 +559,9 @@ bind("i", "<c-e>", "<esc>$a")
 bind("n", "<c-e>", "$")
 bind("n", "<c-a>", "_")
 
--- Clear highlights
-bind("i", "<c-l>", "<esc>:noh<Cr>li")
-bind("n", "<c-l>", ":noh<Cr>")
+-- Clear highlights c-w for whipe!?!
+bind("i", "<c-w>", "<esc>:noh<Cr>li")
+bind("n", "<c-w>", ":noh<Cr>")
 
 -- Jump to previous/next location
 bind("n", "[j", "<c-o>zz")
