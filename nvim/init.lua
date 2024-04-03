@@ -571,8 +571,8 @@ bind("n", "<c-e>", "$")
 bind("n", "<c-a>", "_")
 
 -- Clear highlights c-w for whipe!?!
-bind("i", "<c-w>", "<esc>:noh<Cr>li")
-bind("n", "<c-w>", ":noh<Cr>")
+bind("i", "<c-c>", "<esc>:noh<Cr>li")
+bind("n", "<c-c>", ":noh<Cr>")
 
 -- Jump to previous/next location
 bind("n", "[j", "<c-o>zz")
@@ -695,3 +695,8 @@ bind("n", "<leader>j", ":HopWord<Cr>")
 
 bind("v", "<leader>l", "<cmd>:HopLine<Cr>")
 bind("v", "<leader>j", "<cmd>:HopWord<Cr>")
+
+bind("n", "<C-t>", "<Cmd>BufferPick<CR>")
+-- Move to previous/next
+bind("n", "<C-h>", "<Cmd>BufferPrevious<CR>")
+bind("n", "<C-l>", "<Cmd>BufferNext<CR>")
