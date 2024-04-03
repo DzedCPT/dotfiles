@@ -641,7 +641,7 @@ bind("n", "<leader>hD", function()
 end)
 bind("n", "<leader>td", gs.toggle_deleted)
 
-bind("n", "<C-n>", function()
+function next_hunk()
 	if vim.wo.diff then
 		return "]c"
 	end
@@ -650,9 +650,8 @@ bind("n", "<C-n>", function()
 		vim.fn.feedkeys("zz")
 	end)
 	return "<Ignore>"
-end, { expr = true })
-
-bind("n", "<C-p>", function()
+end
+function prev_hunk()
 	if vim.wo.diff then
 		return "[c"
 	end
@@ -661,7 +660,12 @@ bind("n", "<C-p>", function()
 		vim.fn.feedkeys("zz")
 	end)
 	return "<Ignore>"
-end, { expr = true })
+end
+
+bind("v", "<C-n>", next_hunk, { expr = true })
+bind("v", "<C-p>", prev_hunk, { expr = true })
+bind("n", "<C-n>", next_hunk, { expr = true })
+bind("n", "<C-p>", prev_hunk, { expr = true })
 
 bind("n", "<leader>cc", "<Plug>(git-conflict-ours)")
 bind("n", "<leader>ci", "<Plug>(git-conflict-theirs)")
