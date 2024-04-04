@@ -82,6 +82,7 @@ end
 # ---------------------------------------- #
 
 function cd_fzf;
+	# TODO: Ideally this would pipe in what you've already typed into the buffer into the search box
 	set -x dest (find . -type d -print | fzf )
 	if test -n "$dest ";
 		cd $dest 
