@@ -108,31 +108,8 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 	-- Basic util plugins
-	{
-		"romgrk/barbar.nvim",
-		-- dependencies = {
-		--  	  'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
-		--  	  'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
-		-- },
-		init = function()
-			vim.g.barbar_auto_setup = false
-		end,
-		opts = {
-			icons = {
-				filetype = {
-					-- Requires `nvim-web-devicons` if `true`
-					enabled = false,
-				},
-			},
-		},
-		-- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
-		-- animation = true,
-		-- insert_at_start = true,
-		-- modified = {button = '●', filename=false},
-		-- …etc.
-		-- },
-		version = "^1.0.0", -- optional: only update when a new 1.x version is released
-	},
+	-- tab bar
+	"echasnovski/mini.tabline",
 	-- Add surround actions
 	"echasnovski/mini.surround",
 	-- Need this for copying text from remotes to local clipboard
@@ -227,6 +204,9 @@ require("lazy").setup({
 -- ================================================================================
 -- Configure Plugins
 -- ================================================================================
+
+
+require('mini.tabline').setup()
 
 require("mini.surround").setup(
 	-- This is the default config, but I changed the mappings.
@@ -702,5 +682,5 @@ bind("v", "<leader>j", "<cmd>:HopWord<Cr>")
 
 bind("n", "<C-t>", "<Cmd>BufferPick<CR>")
 -- Move to previous/next
-bind("n", "<C-h>", "<Cmd>BufferPrevious<CR>")
-bind("n", "<C-l>", "<Cmd>BufferNext<CR>")
+bind("n", "<C-h>", ":bprev<CR>")
+bind("n", "<C-l>", ":bnext<CR>")
