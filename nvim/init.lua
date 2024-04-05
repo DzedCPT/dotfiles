@@ -580,6 +580,7 @@ bind("n", "]j", "<c-i>zz")
 -- Jump to start and end of line using the home row keys
 bind("", "H", "^")
 bind("", "L", "$")
+-- Jump to next open spaces using the home row keys
 bind("", "J", "}")
 bind("", "K", "{")
 
