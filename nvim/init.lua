@@ -528,6 +528,8 @@ bind("n", "<Leader>a", ":b#<Cr>")
 
 bind("n", "<Leader>q", ":q<Cr>")
 bind("n", "<leader>w", ":bd<Cr>")
+-- Close all buffers apart from the current one
+bind("n", "<leader>W", ":%bd|e#|bd#<Cr>")
 
 -- Jump around the quickfix list
 bind("n", "[q", ":cprevious<Cr>")
