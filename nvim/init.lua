@@ -158,6 +158,14 @@ require("lazy").setup({
 				sync_install = false,
 				highlight = { enable = true },
 				indent = { enable = true },
+				-- Use v to increase the size of your selection in visual mode.
+				incremental_selection = {
+					enable = true,
+					keymaps = {
+						node_incremental = "v",
+						node_decremental = "V",
+					},
+				},
 			})
 		end,
 	},
