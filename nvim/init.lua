@@ -163,7 +163,8 @@ require("lazy").setup({
 					enable = true,
 					keymaps = {
 						node_incremental = "v",
-						node_decremental = "V",
+						-- Might be nice to map this to something else, but V is too useful in visual mode.
+						-- node_decremental = "V",
 					},
 				},
 			})
