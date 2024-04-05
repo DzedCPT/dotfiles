@@ -66,6 +66,9 @@ vim.opt.relativenumber = true
 vim.opt.termguicolors = true
 vim.g.base16colorspace = 256
 
+-- Hide the header in netrw
+vim.g.netrw_banner=false
+
 -- Prevent the sign bar from having its own background colour.
 vim.cmd("highlight clear SignColumn")
 
