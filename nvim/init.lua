@@ -215,7 +215,8 @@ require("lazy").setup({
 	"hrsh7th/cmp-path",
 	"hrsh7th/cmp-cmdline",
 	"hrsh7th/nvim-cmp",
-	"L3MON4D3/LuaSnip",
+	"dcampos/nvim-snippy",
+	"dcampos/cmp-snippy",
 })
 
 -- ================================================================================
@@ -496,7 +497,9 @@ local cmp = require("cmp")
 cmp.setup({
 	snippet = {
 		expand = function(args)
-			require("luasnip").lsp_expand(args.body)
+			-- require("luasnip").lsp_expand(args.body)
+			 require('snippy').expand_snippet(args.body) -- For `snippy` users.
+			-- require("snippy").lsp_expand(args.body)
 		end,
 	},
 	completion = {
@@ -510,6 +513,7 @@ cmp.setup({
 		["<Tab>"] = cmp.mapping.confirm({ noremap = true, select = true }),
 	}),
 	sources = {
+		{ name = "snippy" },
 		{ name = "nvim_lsp" },
 	},
 })
@@ -710,3 +714,22 @@ bind("n", "<C-t>", "<Cmd>BufferPick<CR>")
 -- Move to previous/next
 bind("n", "<C-h>", ":bprev<CR>")
 bind("n", "<C-l>", ":bnext<CR>")
+require('snippy').setup({
+    -- mappings = {
+    --     is = {
+    --         ['<Tab>'] = 'expand_or_advance',
+    --         ['<S-Tab>'] = 'previous',
+    --     },
+    --     nx = {
+    --         ['<leader>x'] = 'cut_text',
+    --     },
+    -- },
+})
+local mappings = require('snippy.mapping')
+
+-- TODO: Figure out these keymaps
+vim.keymap.set('i', '<Tab>', mappings.expand_or_advance('<Tab>'))
+vim.keymap.set('s', '<Tab>', mappings.next('<Tab>'))
+vim.keymap.set({ 'i', 's' }, '<S-Tab>', mappings.previous('<S-Tab>'))
+vim.keymap.set('x', '<Tab>', mappings.cut_text, { remap = true })
+vim.keymap.set('n', 'g<Tab>', mappings.cut_text, { remap = true })
