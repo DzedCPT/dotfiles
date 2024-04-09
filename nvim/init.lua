@@ -59,7 +59,7 @@ vim.g.mapleader = " "
 
 vim.opt.relativenumber = true
 
--- Netr doesn't behave like other buffers and causes problems by getting locked as a tab. 
+-- Netr doesn't behave like other buffers and causes problems by getting locked as a tab.
 -- See: https://github.com/tpope/vim-vinegar/issues/13 and https://vi.stackexchange.com/questions/14622/how-can-i-close-the-netrw-buffer
 -- This should help to fix that:
 vim.cmd("autocmd FileType netrw setl bufhidden=delete")
@@ -72,7 +72,7 @@ vim.opt.termguicolors = true
 vim.g.base16colorspace = 256
 
 -- Hide the header in netrw
-vim.g.netrw_banner=false
+vim.g.netrw_banner = false
 
 -- Prevent the sign bar from having its own background colour.
 vim.cmd("highlight clear SignColumn")
