@@ -701,6 +701,8 @@ bind("v", "<leader>y", require("osc52").copy_visual)
 -- Neogit keybindings
 bind("n", "<leader>hh", ":Neogit<Cr>")
 bind("n", "<leader>hc", ":Neogit commit<Cr>")
+bind("n", "<leader>hp", ":Neogit pull<Cr>")
+bind("n", "<leader>hP", ":Neogit push<Cr>")
 
 -- Simple hop config
 local hop = require("hop")
