@@ -71,6 +71,9 @@ vim.cmd("autocmd FileType netrw setl bufhidden=delete")
 vim.opt.termguicolors = true
 vim.g.base16colorspace = 256
 
+-- Don't show mode in status ine
+vim.opt.showmode = false
+
 -- Hide the header in netrw
 vim.g.netrw_banner = false
 
