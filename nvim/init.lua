@@ -71,6 +71,9 @@ vim.cmd("autocmd FileType netrw setl bufhidden=delete")
 vim.opt.termguicolors = true
 vim.g.base16colorspace = 256
 
+-- Don't show mode in status ine
+vim.opt.showmode = false
+
 -- Hide the header in netrw
 vim.g.netrw_banner = false
 
@@ -126,8 +129,6 @@ require("lazy").setup({
 	"gbprod/substitute.nvim",
 	-- Always root the workdir
 	"airblade/vim-rooter",
-	-- Better status line
-	"nvim-lualine/lualine.nvim",
 	-- Toggle comments
 	"numToStr/Comment.nvim",
 	-- Highlight the text that got yanked
@@ -393,46 +394,6 @@ vim.cmd("colorscheme kanagawa-dragon")
 -- but this line below is required for the neogit theme to take effect the first
 -- time you open it.
 change_theme("kanagawa-dragon")()
-
-require("lualine").setup({
-	options = {
-		icons_enabled = false,
-		component_separators = { left = "|", right = "|" },
-		section_separators = { left = "", right = "" },
-		disabled_filetypes = {
-			statusline = {},
-			winbar = {},
-		},
-		ignore_focus = {},
-		always_divide_middle = true,
-		globalstatus = true,
-		refresh = {
-			statusline = 1000,
-			tabline = 1000,
-			winbar = 1000,
-		},
-	},
-	sections = {
-		lualine_a = { "mode" },
-		lualine_b = { "branch", "diff", "diagnostics" },
-		lualine_c = { { "filename", path = 1 } },
-		lualine_x = { "" },
-		lualine_y = { "" },
-		lualine_z = { "location" },
-	},
-	inactive_sections = {
-		lualine_a = {},
-		lualine_b = {},
-		lualine_c = { "filename" },
-		lualine_x = { "location" },
-		lualine_y = {},
-		lualine_z = {},
-	},
-	tabline = {},
-	winbar = {},
-	inactive_winbar = {},
-	extensions = {},
-})
 
 local lspconfig = require("lspconfig")
 -- Enable language servers
@@ -735,3 +696,8 @@ vim.keymap.set('s', '<Tab>', mappings.next('<Tab>'))
 vim.keymap.set({ 'i', 's' }, '<S-Tab>', mappings.previous('<S-Tab>'))
 vim.keymap.set('x', '<Tab>', mappings.cut_text, { remap = true })
 vim.keymap.set('n', 'g<Tab>', mappings.cut_text, { remap = true })
+--
+
+require("statusline")
+
+bind("n", "<leader>r", ":source %<CR>")
