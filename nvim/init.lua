@@ -814,13 +814,29 @@ function cmp.mode()
 	return mode_map[mode]
 end
 
+
+function cmp.git()
+
+	 if vim.fn.exists('b:gitsigns_status') ~= 1 then 
+	 	return ""
+		-- return "~ " .. git_dict['head']
+	end
+	-- return vim.api.nvim_buf_get_var(0, 'gitsigns_head') .. vim.api.nvim_buf_get_var(0,'gitsigns_status_dict') 
+	local git_dict = vim.api.nvim_buf_get_var(0,'gitsigns_status_dict')
+	if git_dict['changed'] then
+		return "~ " .. git_dict['head']
+	end
+	return git_dict['head']
+end
+
 -- TOOD: Status lines missed some git info
 
 local statusline = {
 	' %{%v:lua._statusline_component("mode")%} ',
-	"⡳",
+	"⡳ ",
+	'%{%v:lua._statusline_component("git")%} ',
 	-- TODO: Do we even need the file name here since it's in the tabs
-	" %f",
+	-- " %f",
 	" %m", -- is the modifed
 	"%r",
 	"%=",
@@ -832,11 +848,10 @@ local statusline = {
 	-- 'b:gitsigns_head',
 	-- ' %2p%% ',
 	-- '%{%v:lua._statusline_component("position")%}'
+	-- '%{get(b:,'gitsigns_status','')}'
 }
 
--- %{get(b:,'gitsigns_status','')},
--- set statusline+=%{get(b:,'gitsigns_status','')}
-
 vim.o.statusline = table.concat(statusline, "")
+-- set statusline+=%{get(b:,'gitsigns_status','')}
+-- vim.fn.exists('b:gitsigns_status') == 1 then
 
--- vim.cmd("hi statusline guibg=black ctermfg=white guifg=#DCD7BA ctermbg=0")
