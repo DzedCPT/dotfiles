@@ -410,7 +410,8 @@ for _, lsp in ipairs(servers) do
 			-- Goto def/decalaration with zt to put result at top of the screen
 			bind("n", "gD", ":lua vim.lsp.buf.declaration()<Cr>zt", bufopts)
 			bind("n", "gd", ":lua vim.lsp.buf.definition()<Cr>zt", bufopts)
-			bind("n", "K", vim.lsp.buf.hover, bufopts)
+			-- Collides with jumping up to next open line
+			-- bind("n", "K", vim.lsp.buf.hover, bufopts)
 			bind("n", "gi", vim.lsp.buf.implementation, bufopts)
 			bind("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
 			bind("n", "<space>wa", vim.lsp.buf.add_workspace_folder, bufopts)
