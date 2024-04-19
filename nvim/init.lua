@@ -121,6 +121,8 @@ require("lazy").setup({
 	-- Basic util plugins
 	-- tab bar
 	"DzedCPT/mini.tabline",
+	-- Some icons to make things looks nicer:
+	"nvim-tree/nvim-web-devicons",
 	-- Add surround actions
 	"echasnovski/mini.surround",
 	-- Need this for copying text from remotes to local clipboard
@@ -389,11 +391,11 @@ require("kanagawa").setup({
 	},
 })
 
-vim.cmd("colorscheme kanagawa-dragon")
+vim.cmd("colorscheme kanagawa-lotus")
 -- Not sure why this is required (probably has to do with plugin load sequence)
 -- but this line below is required for the neogit theme to take effect the first
 -- time you open it.
-change_theme("kanagawa-dragon")()
+change_theme("kanagawa-lotus")()
 
 local lspconfig = require("lspconfig")
 -- Enable language servers
@@ -410,7 +412,8 @@ for _, lsp in ipairs(servers) do
 			-- Goto def/decalaration with zt to put result at top of the screen
 			bind("n", "gD", ":lua vim.lsp.buf.declaration()<Cr>zt", bufopts)
 			bind("n", "gd", ":lua vim.lsp.buf.definition()<Cr>zt", bufopts)
-			bind("n", "K", vim.lsp.buf.hover, bufopts)
+			-- Collides with jumping up to next open line
+			-- bind("n", "K", vim.lsp.buf.hover, bufopts)
 			bind("n", "gi", vim.lsp.buf.implementation, bufopts)
 			bind("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
 			bind("n", "<space>wa", vim.lsp.buf.add_workspace_folder, bufopts)
@@ -706,11 +709,12 @@ local mappings = require('snippy.mapping')
 -- TODO: Figure out these keymaps
 vim.keymap.set('i', '<Tab>', mappings.expand_or_advance('<Tab>'))
 vim.keymap.set('s', '<Tab>', mappings.next('<Tab>'))
-vim.keymap.set({ 'i', 's' }, '<S-Tab>', mappings.previous('<S-Tab>'))
-vim.keymap.set('x', '<Tab>', mappings.cut_text, { remap = true })
-vim.keymap.set('n', 'g<Tab>', mappings.cut_text, { remap = true })
---
+-- vim.keymap.set({ 'i', 's' }, '<S-Tab>', mappings.previous('<S-Tab>'))
+-- vim.keymap.set('x', '<Tab>', mappings.cut_text, { remap = true })
+-- vim.keymap.set('n', 'g<Tab>', mappings.cut_text, { remap = true })
 
 require("statusline")
 
 bind("n", "<leader>r", ":source %<CR>")
+require("nvim-web-devicons").setup()
+
