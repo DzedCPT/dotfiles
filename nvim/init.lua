@@ -120,7 +120,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	-- Basic util plugins
 	-- tab bar
-	"echasnovski/mini.tabline",
+	"DzedCPT/mini.tabline",
 	-- Add surround actions
 	"echasnovski/mini.surround",
 	-- Need this for copying text from remotes to local clipboard
