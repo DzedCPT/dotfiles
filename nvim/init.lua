@@ -121,6 +121,8 @@ require("lazy").setup({
 	-- Basic util plugins
 	-- tab bar
 	"echasnovski/mini.tabline",
+	-- Some icons to make things looks nicer:
+	"nvim-tree/nvim-web-devicons",
 	-- Add surround actions
 	"echasnovski/mini.surround",
 	-- Need this for copying text from remotes to local clipboard
@@ -714,3 +716,5 @@ vim.keymap.set('s', '<Tab>', mappings.next('<Tab>'))
 require("statusline")
 
 bind("n", "<leader>r", ":source %<CR>")
+require("nvim-web-devicons").setup()
+
