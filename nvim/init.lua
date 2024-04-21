@@ -118,7 +118,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	-- Basic util plugins
+	-- Basic util plugins:
+	-- Always root the workdir
+	"DzedCPT/nvim-rooter",
 	-- tab bar
 	"DzedCPT/mini.tabline",
 	-- Some icons to make things looks nicer:
@@ -129,8 +131,6 @@ require("lazy").setup({
 	"ojroques/nvim-osc52",
 	-- Subsitute text plugin
 	"gbprod/substitute.nvim",
-	-- Always root the workdir
-	"airblade/vim-rooter",
 	-- Toggle comments
 	"numToStr/Comment.nvim",
 	-- Highlight the text that got yanked
@@ -717,4 +717,4 @@ require("statusline")
 
 bind("n", "<leader>r", ":source %<CR>")
 require("nvim-web-devicons").setup()
-
+require("nvim-rooter").setup()
