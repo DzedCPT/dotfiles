@@ -459,14 +459,15 @@ vim.diagnostic.config({
 -- Configure better diagnostic symbols in the side bar.
 local signs = {
 	"Error",
-	"Warn",
+	"Warning",
 	"Hint",
-	"Info",
+	"Information",
 }
 
 for _, type in pairs(signs) do
-	local hl = "LspDiagnosticSign" .. type
+	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = "⏺︎", texthl = hl, numhl = nil })
+
 end
 
 -- nvim-cmp setup
