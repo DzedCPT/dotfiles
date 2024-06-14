@@ -114,7 +114,7 @@ end)
 -- disable ligatures
 config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
 
-config.leader = { key = "x", mods = "CTRL", timeout_milliseconds = 1000 }
+config.leader = { key = "x", mods = "CTRL", timeout_milliseconds = 3000 }
 
 cmd = nil
 
