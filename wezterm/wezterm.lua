@@ -101,27 +101,30 @@ config.font = wezterm.font("JetBrains Mono")
 
 config.enable_tab_bar = false
 
+wezterm.on("toggle-tabbar", function(window, _)
+	local overrides = window:get_config_overrides() or {}
+	if overrides.enable_tab_bar == false then
+		overrides.enable_tab_bar = true
+	else
+		overrides.enable_tab_bar = false
+	end
+	window:set_config_overrides(overrides)
+end)
+
 -- disable ligatures
 config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
 
--- config.leader = { key = "x", mods = "CTRL", timeout_milliseconds = 1000 }
---
---
-function active_pane(tab)
-	for _, item in ipairs(tab:panes_with_info()) do
-		if item.is_active then
-			return item.pane
-		end
-	end
-end
+config.leader = { key = "x", mods = "CTRL", timeout_milliseconds = 1000 }
+
+cmd = nil
 
 config.keys = {
 	{ key = "LeftArrow", mods = "CMD|ALT", action = wezterm.action.ActivateTabRelative(-1) },
 	{ key = "RightArrow", mods = "CMD|ALT", action = wezterm.action.ActivateTabRelative(1) },
 	-- Make it possible to rename the current tab.
 	{
-		key = "E",
-		mods = "CTRL|SHIFT",
+		key = "e",
+		mods = "LEADER",
 		action = wezterm.action.PromptInputLine({
 			description = "Enter new name for tab",
 			action = wezterm.action_callback(function(window, pane, line)
@@ -134,48 +137,96 @@ config.keys = {
 			end),
 		}),
 	},
-	{ key = "p", mods = "CMD", action = wezterm.action.ShowTabNavigator },
+	-- Set a command to run on leader-shift-.
+	{
+		key = ">",
+		mods = "LEADER",
+		action = wezterm.action.PromptInputLine({
+			description = "Enter command:",
+			action = wezterm.action_callback(function(window, pane, line)
+				-- line will be `nil` if they hit escape without entering anything
+				-- An empty string if you just hit enter
+				if line then
+					cmd = line
+				end
+			end),
+		}),
+	},
+	{
+		key = ".",
+		mods = "LEADER",
+		action = wezterm.action_callback(function(window, pane, line)
+			-- Get the top right open pane.
+			-- TODO: This doesn't work if you have 3 columns of panes.
+			tab = pane:tab()
+			right_pane = tab:get_pane_direction("Right")
+			-- Handle the case that we are already in the right pane
+			if right_pane == nil then
+				right_pane = tab:get_pane_direction("Up")
+				-- Handle the case that we are already in the top pane.
+				if right_pane == nil then
+					right_pane = pane
+				end
+			end
+
+			-- TODO: Doesn't work for fish shell, maybe this has something to do with how \n is escaped in fish shell.
+			if cmd then
+				right_pane:send_text(cmd .. "\n")
+			end
+		end),
+	},
+
+	{ key = "p", mods = "LEADER", action = wezterm.action.ShowTabNavigator },
 	{
 		key = "|",
-		mods = "CMD",
+		mods = "LEADER",
 		action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
 	},
 	{
 		key = "-",
-		mods = "CMD",
+		mods = "LEADER",
 		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
 	},
 	{
 		key = "z",
-		mods = "CMD",
+		mods = "LEADER",
 		action = wezterm.action.TogglePaneZoomState,
 	},
 	{
-		key = "i",
-		mods = "CTRL",
-		action = wezterm.action.SendKey({ key = "i", mods = "CTRL" }),
-	},
-	{
 		key = "j",
-		mods = "CMD",
+		mods = "LEADER",
 		action = wezterm.action.ActivatePaneDirection("Down"),
 	},
 	{
 		key = "h",
-		mods = "CMD",
+		mods = "LEADER",
 		action = wezterm.action.ActivatePaneDirection("Left"),
 	},
 	{
 		key = "k",
-		mods = "CMD",
+		mods = "LEADER",
 		action = wezterm.action.ActivatePaneDirection("Up"),
 	},
 	{
 		key = "l",
-		mods = "CMD",
+		mods = "LEADER",
 		action = wezterm.action.ActivatePaneDirection("Right"),
+	},
+	{ key = "b", mods = "LEADER", action = wezterm.action.EmitEvent("toggle-tabbar") },
+	{
+		key = "w",
+		mods = "LEADER",
+		action = wezterm.action.CloseCurrentPane({ confirm = true }),
 	},
 }
 
+-- CMD+NUM to switch to that tab.
+for i = 1, 9 do
+	table.insert(config.keys, {
+		key = tostring(i),
+		mods = "CMD",
+		action = wezterm.action.ActivateTab(i - 1),
+	})
+end
 
 return config
