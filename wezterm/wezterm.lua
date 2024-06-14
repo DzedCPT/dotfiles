@@ -118,6 +118,23 @@ config.leader = { key = "x", mods = "CTRL", timeout_milliseconds = 1000 }
 
 cmd = nil
 
+function get_top_right_most_pane(tab)
+	panes = tab:panes_with_info()
+	-- Pick random pane as first rightmost candidate.
+	rightmost = panes[1]
+	for _,pane in pairs(panes) do
+
+		-- Top most be zero for pane to be at the top.
+		if pane.top == 0 then
+			-- Pick the one that is most left.
+			if pane.left >= rightmost.left then
+				rightmost = pane
+			end
+		end
+	end
+	return rightmost.pane
+end
+
 config.keys = {
 	{ key = "LeftArrow", mods = "CMD|ALT", action = wezterm.action.ActivateTabRelative(-1) },
 	{ key = "RightArrow", mods = "CMD|ALT", action = wezterm.action.ActivateTabRelative(1) },
@@ -156,26 +173,14 @@ config.keys = {
 		key = ".",
 		mods = "LEADER",
 		action = wezterm.action_callback(function(window, pane, line)
-			-- Get the top right open pane.
-			-- TODO: This doesn't work if you have 3 columns of panes.
-			tab = pane:tab()
-			right_pane = tab:get_pane_direction("Right")
-			-- Handle the case that we are already in the right pane
-			if right_pane == nil then
-				right_pane = tab:get_pane_direction("Up")
-				-- Handle the case that we are already in the top pane.
-				if right_pane == nil then
-					right_pane = pane
-				end
-			end
+			run_pane = get_top_right_most_pane(pane:tab())
 
 			-- TODO: Doesn't work for fish shell, maybe this has something to do with how \n is escaped in fish shell.
 			if cmd then
-				right_pane:send_text(cmd .. "\n")
+				run_pane:send_text(cmd .. "\n")
 			end
 		end),
 	},
-
 	{ key = "p", mods = "LEADER", action = wezterm.action.ShowTabNavigator },
 	{
 		key = "|",
