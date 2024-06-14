@@ -506,6 +506,9 @@ bind("i", "jk", "<Esc>")
 -- Not sure why this is required but the esc key was acting up without this
 bind("n", "<Esc>", "")
 
+-- Avoid accidently doing this when running code from wezterm.
+bind("n", ".", "<Nop>")
+
 -- Automatically record macros into @w
 bind("n", "q", "qw_")
 
