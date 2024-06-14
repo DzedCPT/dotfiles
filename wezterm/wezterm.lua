@@ -104,4 +104,78 @@ config.enable_tab_bar = false
 -- disable ligatures
 config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
 
+-- config.leader = { key = "x", mods = "CTRL", timeout_milliseconds = 1000 }
+--
+--
+function active_pane(tab)
+	for _, item in ipairs(tab:panes_with_info()) do
+		if item.is_active then
+			return item.pane
+		end
+	end
+end
+
+config.keys = {
+	{ key = "LeftArrow", mods = "CMD|ALT", action = wezterm.action.ActivateTabRelative(-1) },
+	{ key = "RightArrow", mods = "CMD|ALT", action = wezterm.action.ActivateTabRelative(1) },
+	-- Make it possible to rename the current tab.
+	{
+		key = "E",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action.PromptInputLine({
+			description = "Enter new name for tab",
+			action = wezterm.action_callback(function(window, pane, line)
+				-- line will be `nil` if they hit escape without entering anything
+				-- An empty string if they just hit enter
+				-- Or the actual line of text they wrote
+				if line then
+					window:active_tab():set_title(line)
+				end
+			end),
+		}),
+	},
+	{ key = "p", mods = "CMD", action = wezterm.action.ShowTabNavigator },
+	{
+		key = "|",
+		mods = "CMD",
+		action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
+	},
+	{
+		key = "-",
+		mods = "CMD",
+		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
+	},
+	{
+		key = "z",
+		mods = "CMD",
+		action = wezterm.action.TogglePaneZoomState,
+	},
+	{
+		key = "i",
+		mods = "CTRL",
+		action = wezterm.action.SendKey({ key = "i", mods = "CTRL" }),
+	},
+	{
+		key = "j",
+		mods = "CMD",
+		action = wezterm.action.ActivatePaneDirection("Down"),
+	},
+	{
+		key = "h",
+		mods = "CMD",
+		action = wezterm.action.ActivatePaneDirection("Left"),
+	},
+	{
+		key = "k",
+		mods = "CMD",
+		action = wezterm.action.ActivatePaneDirection("Up"),
+	},
+	{
+		key = "l",
+		mods = "CMD",
+		action = wezterm.action.ActivatePaneDirection("Right"),
+	},
+}
+
+
 return config
