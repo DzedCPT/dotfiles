@@ -177,7 +177,7 @@ config.keys = {
 
 			-- TODO: Doesn't work for fish shell, maybe this has something to do with how \n is escaped in fish shell.
 			if cmd then
-				run_pane:send_text(cmd .. "\n")
+				run_pane:send_text(cmd .. "\r")
 			end
 		end),
 	},
