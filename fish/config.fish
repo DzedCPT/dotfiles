@@ -111,6 +111,7 @@ function fzf_open_file_in_nvim;
 end
 
 bind \co fzf_open_file_in_nvim
+bind -e \n cd_fzf
 bind \cj cd_fzf
 bind \cr history_fzf
 
