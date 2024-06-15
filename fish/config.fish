@@ -58,9 +58,15 @@ alias dspace="sudo du -hsx /* | sort -rh | head -n 40"
 alias sz="du -sh */ | sort -h"
 alias node-pools="gcloud container node-pools list --cluster=ponos-cluster --location=europe-west4-a | cut -f1 -d' '"
 bind \cV 'edit_cmd'
-# For some reason this was required to stop from completing the greyed out text suggestion.
-bind -e \t 
+# For some reason this was required to stop from tab completing the greyed out text suggestion.
+bind -e -a \t 
+# Stop tab from scrolling through the list of auto-complete suggestions. Instead use \cN and \cP like in nvim.
+bind --erase --preset \t
+bind \t forward-word
+# § is mapped by wezterm from ctrl-i
 bind § accept-autosuggestion
+# Use \cN to start the auto-suggestion list.
+bind \cN complete
 alias klog='tail -f /var/log/kern.log'
 
 function vm; 
