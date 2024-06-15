@@ -577,7 +577,7 @@ bind("", "K", "{")
 -- Something to condsider in the future!
 -- vim.api.nvim_set_keymap("i", "<C-H>", 'copilot#Previous()', { silent = true, expr = true })
 -- vim.api.nvim_set_keymap("i", "<C-K>", 'copilot#Next()', { silent = true, expr = true })
-vim.api.nvim_set_keymap("i", "<C-o>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+vim.api.nvim_set_keymap("i", "§", 'copilot#Accept("<CR>")', { silent = true, expr = true })
 
 bind("n", "<leader>df", vim.diagnostic.open_float)
 -- jump to next/prev diagnostic

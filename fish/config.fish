@@ -58,7 +58,9 @@ alias dspace="sudo du -hsx /* | sort -rh | head -n 40"
 alias sz="du -sh */ | sort -h"
 alias node-pools="gcloud container node-pools list --cluster=ponos-cluster --location=europe-west4-a | cut -f1 -d' '"
 bind \cV 'edit_cmd'
-bind \ci accept-autosuggestion
+# For some reason this was required to stop from completing the greyed out text suggestion.
+bind -e \t 
+bind § accept-autosuggestion
 alias klog='tail -f /var/log/kern.log'
 
 function vm; 

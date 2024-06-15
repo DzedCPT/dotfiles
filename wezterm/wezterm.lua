@@ -230,7 +230,9 @@ config.keys = {
 			mode = "SwapWithActiveKeepFocus",
 		}),
 	},
-
+	-- Make it possible to rebind ctrl-i by mapping it to § and then mapping § in vim and fish.
+	-- See: https://github.com/wez/wezterm/issues/1851
+	{key="phys:I", mods="CTRL", action=wezterm.action.SendKey { key = '§'}},
 }
 
 -- CMD+NUM to switch to that tab.
