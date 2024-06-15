@@ -135,6 +135,12 @@ function get_top_right_most_pane(tab)
 	return rightmost.pane
 end
 
+function runCmd(cmd, pane)
+	if cmd then
+		appendToFile(cmd_file, cmd)
+		pane:send_text(cmd .. "\r")
+	end
+end
 config.keys = {
 	{ key = "LeftArrow", mods = "CMD|ALT", action = wezterm.action.ActivateTabRelative(-1) },
 	{ key = "RightArrow", mods = "CMD|ALT", action = wezterm.action.ActivateTabRelative(1) },
@@ -164,7 +170,8 @@ config.keys = {
 				-- line will be `nil` if they hit escape without entering anything
 				-- An empty string if you just hit enter
 				if line then
-					cmd = line
+					run_pane = get_top_right_most_pane(pane:tab())
+					runCmd(line, run_pane)
 				end
 			end),
 		}),
