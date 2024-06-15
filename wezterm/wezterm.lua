@@ -223,6 +223,14 @@ config.keys = {
 		mods = "LEADER",
 		action = wezterm.action.CloseCurrentPane({ confirm = true }),
 	},
+	{
+		key = "J",
+		mods = "LEADER",
+		action = wezterm.action.PaneSelect({
+			mode = "SwapWithActiveKeepFocus",
+		}),
+	},
+
 }
 
 -- CMD+NUM to switch to that tab.
