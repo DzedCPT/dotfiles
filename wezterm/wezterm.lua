@@ -3,6 +3,7 @@ local wezterm = require("wezterm")
 
 -- This table will hold the configuration.
 local config = {}
+config.unzoom_on_switch_pane = true
 
 -- In newer versions of wezterm, use the config_builder which will
 -- help provide clearer error messages
@@ -122,8 +123,7 @@ function get_top_right_most_pane(tab)
 	panes = tab:panes_with_info()
 	-- Pick random pane as first rightmost candidate.
 	rightmost = panes[1]
-	for _,pane in pairs(panes) do
-
+	for _, pane in pairs(panes) do
 		-- Top most be zero for pane to be at the top.
 		if pane.top == 0 then
 			-- Pick the one that is most left.
@@ -135,12 +135,75 @@ function get_top_right_most_pane(tab)
 	return rightmost.pane
 end
 
+cmd_file = "/Users/me/.local/share/wezterm/cmds.txt"
+
+function reverseList(list)
+	local reversed = {}
+	for i = #list, 1, -1 do
+		table.insert(reversed, list[i])
+	end
+	return reversed
+end
+
+function readUniqueLines(filename)
+	local lines = {}
+	local unique_lines = {}
+
+	-- Open the file for reading
+	local file = io.open(filename, "r")
+	if not file then
+		error("Could not open file " .. filename)
+	end
+
+	-- Read each line and store unique lines in a table
+	for line in file:lines() do
+		if not lines[line] then
+			lines[line] = true
+			table.insert(unique_lines, line)
+		end
+	end
+
+	-- Close the file
+	file:close()
+
+	-- Reverse the order so that the top option is the most recent.
+	return reverseList(unique_lines)
+end
+
+function appendToFile(filename, text)
+	local file = io.open(filename, "a") -- Open the file in append mode
+	if not file then
+		error("Could not open file " .. filename)
+	end
+
+	file:write(text .. "\n") -- Write the text followed by a newline character
+	file:close() -- Close the file
+end
+
 function runCmd(cmd, pane)
 	if cmd then
 		appendToFile(cmd_file, cmd)
 		pane:send_text(cmd .. "\r")
 	end
 end
+
+function getLastLine(filename)
+	local file = io.open(filename, "r") -- Open the file in read mode
+	if not file then
+		error("Could not open file " .. filename)
+	end
+
+	local lastLine = nil
+	for line in file:lines() do
+		lastLine = line
+	end
+
+	file:close() -- Close the file
+	return lastLine
+end
+
+config.automatically_reload_config = false
+
 config.keys = {
 	{ key = "LeftArrow", mods = "CMD|ALT", action = wezterm.action.ActivateTabRelative(-1) },
 	{ key = "RightArrow", mods = "CMD|ALT", action = wezterm.action.ActivateTabRelative(1) },
@@ -159,6 +222,35 @@ config.keys = {
 				end
 			end),
 		}),
+	},
+	{
+		key = "r",
+		mods = "LEADER|CTRL",
+		action = wezterm.action_callback(function(window, pane)
+			local choices = {}
+			for _, line in pairs(readUniqueLines(cmd_file)) do
+				table.insert(choices, { label = line })
+			end
+
+			window:perform_action(
+				wezterm.action.InputSelector({
+					action = wezterm.action_callback(function(window, pane, id, label)
+						if not id and not label then
+							wezterm.log_info("cancelled")
+						else
+							run_pane = get_top_right_most_pane(pane:tab())
+							runCmd(label, run_pane)
+						end
+					end),
+					title = "Run Command",
+					choices = choices,
+					-- alphabet = "123456789",
+					description = "Select command to run",
+					fuzzy = true,
+				}),
+				pane
+			)
+		end),
 	},
 	-- Set a command to run on leader-shift-.
 	{
@@ -181,11 +273,8 @@ config.keys = {
 		mods = "LEADER",
 		action = wezterm.action_callback(function(window, pane, line)
 			run_pane = get_top_right_most_pane(pane:tab())
-
-			-- TODO: Doesn't work for fish shell, maybe this has something to do with how \n is escaped in fish shell.
-			if cmd then
-				run_pane:send_text(cmd .. "\r")
-			end
+			cmd = getLastLine(cmd_file)
+			runCmd(cmd, run_pane)
 		end),
 	},
 	{ key = "p", mods = "LEADER", action = wezterm.action.ShowTabNavigator },
@@ -239,7 +328,12 @@ config.keys = {
 	},
 	-- Make it possible to rebind ctrl-i by mapping it to § and then mapping § in vim and fish.
 	-- See: https://github.com/wez/wezterm/issues/1851
-	{key="phys:I", mods="CTRL", action=wezterm.action.SendKey { key = '§'}},
+	{ key = "phys:I", mods = "CTRL", action = wezterm.action.SendKey({ key = "§" }) },
+	{
+		key = "r",
+		mods = "CMD|SHIFT",
+		action = wezterm.action.ReloadConfiguration,
+	},
 }
 
 -- CMD+NUM to switch to that tab.
