@@ -156,7 +156,7 @@ config.keys = {
 	},
 	-- Set a command to run on leader-shift-.
 	{
-		key = ">",
+		key = ":",
 		mods = "LEADER",
 		action = wezterm.action.PromptInputLine({
 			description = "Enter command:",
