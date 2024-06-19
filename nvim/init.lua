@@ -157,7 +157,19 @@ require("lazy").setup({
 			local configs = require("nvim-treesitter.configs")
 
 			configs.setup({
-				ensure_installed = { "lua", "python", "fish", "dockerfile", "c", "sql", "markdown", "yaml", "go" },
+				ensure_installed = {
+					"lua",
+					"python",
+					"fish",
+					"dockerfile",
+					"c",
+					"cpp",
+					"sql",
+					"markdown",
+					"yaml",
+					"go",
+					"cmake",
+				},
 				sync_install = false,
 				highlight = { enable = true },
 				indent = { enable = true },
