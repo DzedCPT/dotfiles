@@ -135,8 +135,6 @@ require("lazy").setup({
 	"numToStr/Comment.nvim",
 	-- Highlight the text that got yanked
 	"machakann/vim-highlightedyank",
-	-- Format code
-	"mhartington/formatter.nvim", -- REQUIRES: Stylelua, black.
 	-- Theme
 	"rebelot/kanagawa.nvim",
 	{
@@ -360,36 +358,6 @@ require("telescope").setup({
 	},
 })
 
-local util = require("formatter.util")
-
-require("formatter").setup({
-	logging = true,
-	log_level = vim.log.levels.INFO,
-	-- Configure formatteres
-	filetype = {
-		python = {
-			function()
-				-- Supports conditional formatting
-				return {
-					exe = "black",
-					args = { "-q", "-" },
-					stdin = true,
-				}
-			end,
-		},
-		lua = {
-			require("formatter.filetypes.lua").stylua,
-		},
-		go = {
-			require("formatter.filetypes.go").gofmt,
-		},
-		-- Format remove trailing white spaces from all files.
-		["*"] = {
-			require("formatter.filetypes.any").remove_trailing_whitespace,
-		},
-	},
-})
-
 require("kanagawa").setup({
 	-- This remove's gutter's background color
 	colors = {
@@ -580,6 +548,23 @@ bind("", "L", "$")
 -- Jump to next open spaces using the home row keys
 bind("", "J", "}")
 bind("", "K", "{")
+
+-- Don't need an entire plugin just for formatting.
+-- Plus doing it like this prints the command output,
+-- Which is helpful to see issues
+function format()
+	if vim.bo.filetype == "lua" then
+		vim.cmd(":!stylua %")
+	elseif vim.bo.filetype == "python" then
+		vim.cmd(":!black %")
+	elseif vim.bo.filetype == "cpp" then
+		vim.cmd(":!clang-format --style=file -i %")
+	else
+		vim.cmd(":echo 'No formatter configue for filetype'")
+	end
+end
+
+bind("n", "<leader>ef", format)
 
 -- ================================================================================
 -- Extension Keybindings
