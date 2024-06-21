@@ -236,8 +236,7 @@ require("lazy").setup({
 -- Configure Plugins
 -- ================================================================================
 
-
-require('mini.tabline').setup()
+require("mini.tabline").setup()
 
 require("mini.surround").setup(
 	-- This is the default config, but I changed the mappings.
@@ -447,7 +446,6 @@ local signs = {
 for _, type in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = "⏺︎", texthl = hl, numhl = nil })
-
 end
 
 -- nvim-cmp setup
@@ -456,7 +454,7 @@ cmp.setup({
 	snippet = {
 		expand = function(args)
 			-- require("luasnip").lsp_expand(args.body)
-			 require('snippy').expand_snippet(args.body) -- For `snippy` users.
+			require("snippy").expand_snippet(args.body) -- For `snippy` users.
 			-- require("snippy").lsp_expand(args.body)
 		end,
 	},
@@ -694,22 +692,22 @@ bind("n", "<C-t>", "<Cmd>BufferPick<CR>")
 -- Move to previous/next
 bind("n", "<C-h>", ":bprev<CR>")
 bind("n", "<C-l>", ":bnext<CR>")
-require('snippy').setup({
-    -- mappings = {
-    --     is = {
-    --         ['<Tab>'] = 'expand_or_advance',
-    --         ['<S-Tab>'] = 'previous',
-    --     },
-    --     nx = {
-    --         ['<leader>x'] = 'cut_text',
-    --     },
-    -- },
+require("snippy").setup({
+	-- mappings = {
+	--     is = {
+	--         ['<Tab>'] = 'expand_or_advance',
+	--         ['<S-Tab>'] = 'previous',
+	--     },
+	--     nx = {
+	--         ['<leader>x'] = 'cut_text',
+	--     },
+	-- },
 })
-local mappings = require('snippy.mapping')
+local mappings = require("snippy.mapping")
 
 -- TODO: Figure out these keymaps
-vim.keymap.set('i', '<Tab>', mappings.expand_or_advance('<Tab>'))
-vim.keymap.set('s', '<Tab>', mappings.next('<Tab>'))
+vim.keymap.set("i", "<Tab>", mappings.expand_or_advance("<Tab>"))
+vim.keymap.set("s", "<Tab>", mappings.next("<Tab>"))
 -- vim.keymap.set({ 'i', 's' }, '<S-Tab>', mappings.previous('<S-Tab>'))
 -- vim.keymap.set('x', '<Tab>', mappings.cut_text, { remap = true })
 -- vim.keymap.set('n', 'g<Tab>', mappings.cut_text, { remap = true })
