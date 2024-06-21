@@ -1,15 +1,35 @@
 local wezterm = require("wezterm")
--- https://wezfurlong.org/wezterm/config/lua/config/window_decorations.html
 
--- This table will hold the configuration.
-local config = {}
-config.unzoom_on_switch_pane = true
+-- ================================================================================
+-- General Config
+-- ================================================================================
 
 -- In newer versions of wezterm, use the config_builder which will
 -- help provide clearer error messages
 if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
+
+-- This table will hold the configuration.
+local config = {}
+config.unzoom_on_switch_pane = true
+config.force_reverse_video_cursor = false
+config.font = wezterm.font("JetBrains Mono")
+-- Can toggle it back, but open without tabbar but default.
+config.enable_tab_bar = false
+-- disable ligatures
+config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
+config.automatically_reload_config = false
+
+-- Path to file used to store cmd history.
+-- Basically everytime you run a command through wezterm it will be appended to this file.
+-- You can also search this from wezterm to rerun an older cmd
+cmd_file = "/Users/me/.local/share/wezterm/cmds.txt"
+
+-- ================================================================================
+-- Theme
+-- ================================================================================
+
 function kanagawa_colors(variant)
 	if variant == "dragon" then
 		return {
@@ -95,12 +115,11 @@ function scheme_for_appearance(appearance)
 	end
 end
 
-config.force_reverse_video_cursor = false
 config.colors = scheme_for_appearance(wezterm.gui.get_appearance())
 
-config.font = wezterm.font("JetBrains Mono")
-
-config.enable_tab_bar = false
+-- ================================================================================
+-- Util function used in keybindings
+-- ================================================================================
 
 wezterm.on("toggle-tabbar", function(window, _)
 	local overrides = window:get_config_overrides() or {}
@@ -112,17 +131,15 @@ wezterm.on("toggle-tabbar", function(window, _)
 	window:set_config_overrides(overrides)
 end)
 
--- disable ligatures
-config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
-
-config.leader = { key = "x", mods = "CTRL", timeout_milliseconds = 3000 }
-
-cmd = nil
-
-function get_top_right_most_pane(tab)
+function getRunPane(tab)
+	-- Given a tab return the pane to run a command in.
+	-- The pane selected is the top right pane
 	panes = tab:panes_with_info()
+
 	-- Pick random pane as first rightmost candidate.
 	rightmost = panes[1]
+
+	-- Find the top right pane.
 	for _, pane in pairs(panes) do
 		-- Top most be zero for pane to be at the top.
 		if pane.top == 0 then
@@ -132,10 +149,9 @@ function get_top_right_most_pane(tab)
 			end
 		end
 	end
+
 	return rightmost.pane
 end
-
-cmd_file = "/Users/me/.local/share/wezterm/cmds.txt"
 
 function reverseList(list)
 	local reversed = {}
@@ -149,7 +165,6 @@ function readUniqueLines(filename)
 	local lines = {}
 	local unique_lines = {}
 
-	-- Open the file for reading
 	local file = io.open(filename, "r")
 	if not file then
 		error("Could not open file " .. filename)
@@ -163,7 +178,6 @@ function readUniqueLines(filename)
 		end
 	end
 
-	-- Close the file
 	file:close()
 
 	-- Reverse the order so that the top option is the most recent.
@@ -176,13 +190,14 @@ function appendToFile(filename, text)
 		error("Could not open file " .. filename)
 	end
 
-	file:write(text .. "\n") -- Write the text followed by a newline character
-	file:close() -- Close the file
+	file:write(text .. "\n")
+	file:close()
 end
 
 function runCmd(cmd, pane)
 	if cmd then
 		appendToFile(cmd_file, cmd)
+		-- \t to actually execute it.
 		pane:send_text(cmd .. "\r")
 	end
 end
@@ -198,11 +213,15 @@ function getLastLine(filename)
 		lastLine = line
 	end
 
-	file:close() -- Close the file
+	file:close()
 	return lastLine
 end
 
-config.automatically_reload_config = false
+-- ================================================================================
+-- Keybindings
+-- ================================================================================
+
+config.leader = { key = "x", mods = "CTRL", timeout_milliseconds = 3000 }
 
 config.keys = {
 	{ key = "LeftArrow", mods = "CMD|ALT", action = wezterm.action.ActivateTabRelative(-1) },
@@ -223,6 +242,7 @@ config.keys = {
 			end),
 		}),
 	},
+	-- LEADER + <c-r> to search and execute from command history.
 	{
 		key = "r",
 		mods = "LEADER|CTRL",
@@ -235,16 +255,13 @@ config.keys = {
 			window:perform_action(
 				wezterm.action.InputSelector({
 					action = wezterm.action_callback(function(window, pane, id, label)
-						if not id and not label then
-							wezterm.log_info("cancelled")
-						else
-							run_pane = get_top_right_most_pane(pane:tab())
+						if id and label then
+							run_pane = getRunPane(pane:tab())
 							runCmd(label, run_pane)
 						end
 					end),
 					title = "Run Command",
 					choices = choices,
-					-- alphabet = "123456789",
 					description = "Select command to run",
 					fuzzy = true,
 				}),
@@ -262,7 +279,7 @@ config.keys = {
 				-- line will be `nil` if they hit escape without entering anything
 				-- An empty string if you just hit enter
 				if line then
-					run_pane = get_top_right_most_pane(pane:tab())
+					run_pane = getRunPane(pane:tab())
 					runCmd(line, run_pane)
 				end
 			end),
@@ -272,7 +289,7 @@ config.keys = {
 		key = ".",
 		mods = "LEADER",
 		action = wezterm.action_callback(function(window, pane, line)
-			run_pane = get_top_right_most_pane(pane:tab())
+			run_pane = getRunPane(pane:tab())
 			cmd = getLastLine(cmd_file)
 			runCmd(cmd, run_pane)
 		end),
