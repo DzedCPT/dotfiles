@@ -595,6 +595,7 @@ bind("n", "<leader>s", telescope_builtin.lsp_document_symbols)
 bind("n", "<leader>fj", telescope_builtin.jumplist)
 bind("n", "<leader>fs", telescope_builtin.grep_string)
 bind("n", "<leader>fp", telescope_builtin.resume)
+bind("n", "<leader>fh", telescope_builtin.help_tags)
 -- there are some more telescope pickers that could be helpful to configure at some point.
 
 -- Substitute keybindings
