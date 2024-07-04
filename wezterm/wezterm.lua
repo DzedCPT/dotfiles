@@ -347,9 +347,14 @@ config.keys = {
 	-- See: https://github.com/wez/wezterm/issues/1851
 	{ key = "phys:I", mods = "CTRL", action = wezterm.action.SendKey({ key = "§" }) },
 	{
-		key = "r",
-		mods = "CMD|SHIFT",
+		key = "R",
+		mods = "LEADER",
 		action = wezterm.action.ReloadConfiguration,
+	},
+	{
+		key = "c",
+		mods = "LEADER",
+		action = wezterm.action.SpawnTab("DefaultDomain"),
 	},
 }
 
