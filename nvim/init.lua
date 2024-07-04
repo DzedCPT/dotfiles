@@ -370,11 +370,18 @@ require("kanagawa").setup({
 	},
 })
 
-vim.cmd("colorscheme kanagawa-lotus")
+function getDarkMode() 
+	-- Currently this will only work on Mac
+	return vim.fn.system('defaults read -g AppleInterfaceStyle')
+end
+
+local color_scheme = getDarkMode() == "Dark" and "kanagawa-lotus" or "kanagawa-dragon"
+
+vim.cmd("colorscheme " .. color_scheme)
 -- Not sure why this is required (probably has to do with plugin load sequence)
 -- but this line below is required for the neogit theme to take effect the first
 -- time you open it.
-change_theme("kanagawa-lotus")()
+change_theme(color_scheme)()
 
 local lspconfig = require("lspconfig")
 -- Enable language servers
