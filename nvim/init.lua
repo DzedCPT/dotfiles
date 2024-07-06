@@ -350,9 +350,9 @@ require("kanagawa").setup({
 	},
 })
 
-function getDarkMode() 
+local function getDarkMode()
 	-- Currently this will only work on Mac
-	return vim.fn.system('defaults read -g AppleInterfaceStyle')
+	return vim.fn.system("defaults read -g AppleInterfaceStyle")
 end
 
 local color_scheme = getDarkMode() == "Dark" and "kanagawa-lotus" or "kanagawa-dragon"
