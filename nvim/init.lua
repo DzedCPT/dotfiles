@@ -603,6 +603,7 @@ bind("n", "<leader>fj", telescope_builtin.jumplist)
 bind("n", "<leader>fs", telescope_builtin.grep_string)
 bind("n", "<leader>fp", telescope_builtin.resume)
 bind("n", "<leader>fh", telescope_builtin.help_tags)
+bind("n", "<leader>fa", telescope_builtin.commands)
 -- there are some more telescope pickers that could be helpful to configure at some point.
 
 -- Substitute keybindings
