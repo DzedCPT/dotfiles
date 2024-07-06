@@ -335,27 +335,7 @@ require("neogit").setup({
 	},
 })
 
-require("telescope").setup({
-	defaults = {
-		layout_strategy = "bottom_pane",
-		layout_config = {
-			height = 10,
-			prompt_position = "bottom",
-		},
-		preview = {
-			hide_on_startup = true,
-		},
-		prompt_title = false,
-	},
-	pickers = {
-		lsp_document_symbols = {
-			-- Can be multiple symbols with same name, so having the preview is helpful
-			preview = {
-				hide_on_startup = false,
-			},
-		},
-	},
-})
+require("telescope").setup({})
 
 require("kanagawa").setup({
 	-- This remove's gutter's background color
