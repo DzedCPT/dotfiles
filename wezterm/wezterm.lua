@@ -332,7 +332,7 @@ config.keys = {
 	},
 	{ key = "b", mods = "LEADER", action = wezterm.action.EmitEvent("toggle-tabbar") },
 	{
-		key = "w",
+		key = "x",
 		mods = "LEADER",
 		action = wezterm.action.CloseCurrentPane({ confirm = true }),
 	},
