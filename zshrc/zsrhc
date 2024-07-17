@@ -1,0 +1,217 @@
+# Author: @jedda_boyle
+# Content: zsh config file
+
+# Dependencies ===================================
+
+CONFIG="/Users/Jed/.config"
+
+if [ ! -d $CONFIG ]
+then
+	mkdir $CONFIG
+fi
+
+if [ ! -d "$CONFIG/base16-shell" ]
+then
+	pushd $CONFIG
+		echo "Fetching base16-shell"
+		git clone https://github.com/chriskempson/base16-shell.git
+		echo "Done"
+	popd
+fi
+
+if [ ! -f "$CONFIG/antigen.zsh" ]
+then
+	pushd $CONFIG
+		echo "Fetching antigen"
+		curl -L git.io/antigen > antigen.zsh
+		echo "Done"
+	popd
+fi
+
+if [ ! -d "$CONFIG/base16-kitty" ]
+then
+	pushd $CONFIG
+		echo "Fetching kitty themes"
+		git clone https://github.com/kdrag0n/base16-kitty.git
+		echo "Done"
+	popd
+fi
+
+# Plugins ========================================
+
+source $CONFIG/antigen.zsh
+antigen bundle zsh-users/zsh-syntax-highlighting
+# Improved completion stubs for more applications.
+antigen bundle zsh-users/zsh-completions
+# Suggest cmd from history in grey while typing.
+antigen bundle zsh-users/zsh-autosuggestions
+# Add commond to cd to gitroot folder
+antigen bundle mollifier/cd-gitroot
+# Need this for colour scheme to work.
+antigen bundle $CONFIG/base16-shell
+antigen apply 
+
+# Global Settings ================================
+
+export EDITOR=$(which nvim)
+export VISUAL=$EDITOR
+
+# History settings.
+HISTSIZE=100
+SAVEHIST=10000
+setopt share_history
+
+# Put the current typed text into the BUFFER variable.
+typeset -g BUFFER MATCH MBEGIN MEND CURSOR
+
+# Auto Completion Settings =======================
+
+# Visually tab through auto completion options.
+zstyle ':completion:*' menu select
+
+# Case insensitive completion
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
+
+# Use shift-tab to reverse through auto completion options.
+bindkey '^[[Z' reverse-menu-complete
+
+# Execute suggestion by pressing ;
+bindkey ';' autosuggest-execute
+
+# Configure Prompt Configure =====================
+
+# Print a newline before the prompt, unless it's the
+# first prompt in the process.
+function precmd() {
+    if [ -z "$NEW_LINE_BEFORE_PROMPT" ]; then
+        NEW_LINE_BEFORE_PROMPT=1
+    elif [ "$NEW_LINE_BEFORE_PROMPT" -eq 1 ]; then
+        echo ""
+    fi
+}
+
+# Find and set branch name var if in git repository.
+function git_branch_name()
+{
+  branch=$(git symbolic-ref HEAD 2> /dev/null | awk 'BEGIN{FS="/"} {print $NF}')
+  if [[ $branch == "" ]];
+  then
+	:
+  else
+	  echo '('$branch')'
+  fi
+}
+
+# Enable substitution in the prompt.
+setopt prompt_subst
+
+# Config how prompt will look
+PROMPT='%B%F{blue}%~%f%b %F{magenta}$(git_branch_name)%f %F{red}|%f '
+
+# Aliases ========================================
+
+alias session="tmux -f ~/.config/tmux/tmux.conf new -s DzedCPT"
+
+#alias config_vim="nvim ~/.config/nvim/init.vim"
+#alias config_tmux="nvim ~/.config/tmux/tmux.conf"
+alias config_zsh="nvim ~/.zshrc"
+
+# Switching themes
+#alias light="base16_google-light"
+alias light="base16_google-light && kitty @ set-colors -a $CONFIG/base16-kitty/colors/base16-google-light-256.conf"
+alias dark="base16_eighties && kitty @ set-colors -a $CONFIG/base16-kitty/colors/base16-eighties-256.conf"
+alias nord="base16_nord && kitty @ set-colors -a $CONFIG/base16-kitty/colors/base16-nord-256.conf"
+dark
+
+# Alias clear so it doesn't get a new line before it.
+alias clear="unset NEW_LINE_BEFORE_PROMPT && clear" 
+
+# Jump to root of current git directory
+alias root='cd-gitroot'
+
+# source zshrc file
+alias src='source ~/.zshrc'
+
+# Git aliases
+alias gs="git status"
+alias ga="git add -u"
+alias gc="git commit"
+alias gl="git log"
+alias gr="git rebase -i master" # Rebase all commits on current branch
+alias gb="git branch" # Rebase all commits on current branch
+gnb () { git checkout -b $@ } # git-new-branch
+gcb () { git checkout $@ } #git-checkout-branch
+
+alias ll="ls -al" # Rebase all commits on current branch
+ls () {/bin/ls -G $@} #ls with colours
+
+# Rather move to trash than actually delete
+rm () { mv $@ ~/.Trash }
+
+# Use pushd instead of cd
+cd () {
+	if [ $# -eq 0 ]; then
+		pushd ~ >/dev/null
+    else
+		pushd $@ >/dev/null
+	fi
+}
+
+# Check if name in dir
+ishere () { ls . | grep -i $@ }
+
+# Use ff to find a file in sub directory
+ff () { find *$@* }
+
+# Use gg for git grep
+gg () { git grep $@ }
+
+# Key Bindings ===================================
+
+# Edit current command in nvim using ctrl-e
+autoload edit-command-line; zle -N edit-command-line
+bindkey '^e' edit-command-line
+
+# Function to execute current command and print output to vim buffer
+cmd-out-vim () {
+	cmd="$BUFFER | nvim"
+	eval ${cmd}
+	zle reset-prompt
+}
+zle -N cmd-out-vim
+bindkey '^o' cmd-out-vim # Bind to ctrl-o
+
+# Setup FZF ======================================
+
+# Ensure fzf is on the path.
+if [[ ! "$PATH" == */usr/local/opt/fzf/bin* ]]; then
+  export PATH="${PATH:+${PATH}:}/usr/local/opt/fzf/bin"
+fi
+
+# By remapping these keys we can use tab to select an option
+FZF_KEY_BINDINGS="tab:up,btab:down"
+
+# Search through history and exec selection
+fzf-search-history() {
+	# Use fzf to search through history file select a command.
+	cmd=$(cat $HISTFILE | awk -F ";" '{print $2}' | sort | uniq | fzf --bind=$FZF_KEY_BINDINGS)
+	echo -e "\n\033[0;32m$cmd\033[0m" # Print the command selected in green.
+	eval ${cmd}
+	zle reset-prompt
+}
+zle -N fzf-search-history
+bindkey '^R' fzf-search-history # Bind to ctrl-R
+
+# Function to jump to dir or file location.
+goto() {
+	destination=$({find . -type f & find . -type d} | fzf --bind=$FZF_KEY_BINDINGS)
+	destination_path=$(dirname $destination)
+	cd $destination_path
+}
+
+# Function to open file
+goin() {
+	file_to_open=$(find . -type f | fzf --bind=$FZF_KEY_BINDINGS)
+	nvim $file_to_open
+}
+
