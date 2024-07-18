@@ -519,7 +519,6 @@ bind("i", "<c-e>", "<esc>$a")
 bind("n", "<c-e>", "$")
 bind("n", "<c-a>", "_")
 
--- Clear highlights c-w for whipe!?!
 bind("i", "<c-c>", "<esc>:noh<Cr>li")
 bind("n", "<c-c>", ":noh<Cr>")
 
