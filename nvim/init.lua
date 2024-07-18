@@ -680,6 +680,11 @@ bind("n", "<C-t>", "<Cmd>BufferPick<CR>")
 -- Move to previous/next
 bind("n", "<C-h>", ":bprev<CR>")
 bind("n", "<C-l>", ":bnext<CR>")
+bind("v", "<C-h>", "<Esc>:bprev<CR>")
+bind("v", "<C-l>", "<Esc>:bnext<CR>")
+bind("i", "<C-h>", "<Esc>:bprev<CR>")
+bind("i", "<C-l>", "<Esc>:bnext<CR>")
+
 require("snippy").setup({
 	-- mappings = {
 	--     is = {
