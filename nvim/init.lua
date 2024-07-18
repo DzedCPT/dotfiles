@@ -131,8 +131,6 @@ require("lazy").setup({
 	"ojroques/nvim-osc52",
 	-- Subsitute text plugin
 	"gbprod/substitute.nvim",
-	-- Toggle comments
-	"numToStr/Comment.nvim",
 	-- Highlight the text that got yanked
 	"machakann/vim-highlightedyank",
 	-- Theme
@@ -292,7 +290,6 @@ hop.setup({
 
 local substitute = require("substitute")
 substitute.setup()
-require("Comment").setup()
 require("gitsigns").setup()
 require("git-conflict").setup()
 
