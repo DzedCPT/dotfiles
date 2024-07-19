@@ -118,6 +118,15 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+	{ dir = "/Users/me/Developer/nvim-command-runner/", dev = true },
+	"epwalsh/obsidian.nvim",
+	{
+		"numToStr/Comment.nvim",
+		opts = {
+			-- add any options here
+		},
+	},
+	-- {"kevinhwang91/nvim-bqf", ft="qf"},
 	-- Basic util plugins:
 	-- Always root the workdir
 	"DzedCPT/nvim-rooter",
