@@ -463,7 +463,12 @@ cmp.setup({
 	}),
 	sources = {
 		{ name = "snippy" },
-		{ name = "nvim_lsp" },
+		{
+			name = "nvim_lsp",
+			entry_filter = function(entry)
+				return require("cmp").lsp.CompletionItemKind.Snippet ~= entry:get_kind()
+			end,
+		},
 	},
 })
 
