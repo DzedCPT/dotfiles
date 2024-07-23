@@ -669,8 +669,8 @@ bind("n", "<leader>cc", "<Plug>(git-conflict-ours)")
 bind("n", "<leader>ci", "<Plug>(git-conflict-theirs)")
 bind("n", "<leader>cb", "<Plug>(git-conflict-both)")
 bind("n", "<leader>c0", "<Plug>(git-conflict-none)")
-bind("n", "]c", "<Plug>(git-conflict-prev-conflict)")
-bind("n", "[c", "<Plug>(git-conflict-next-conflict)")
+bind("n", "<leader>cj", "<Plug>(git-conflict-next-conflict)")
+bind("n", "<leader>ck", "<Plug>(git-conflict-prev-conflict)")
 bind("n", "<leader>cl", ":GitConflictListQf<CR>")
 
 -- Commands for changing themes
