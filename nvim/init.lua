@@ -730,3 +730,8 @@ require("statusline")
 bind("n", "<leader>r", ":source %<CR>")
 require("nvim-web-devicons").setup()
 require("nvim-rooter").setup()
+
+local mappings = require('snippy.mapping')
+vim.keymap.set('i', '<c-l>', mappings.expand_or_advance('<Tab>'))
+vim.keymap.set('s', '<c-l>', mappings.next('<Tab>'))
+vim.keymap.set({ 'i', 's' }, '<c-h>', mappings.previous('<S-Tab>'))
