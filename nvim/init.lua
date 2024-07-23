@@ -693,7 +693,6 @@ bind("n", "<leader>j", ":HopWord<Cr>")
 bind("v", "<leader>l", "<cmd>:HopLine<Cr>")
 bind("v", "<leader>j", "<cmd>:HopWord<Cr>")
 
-bind("n", "<C-t>", "<Cmd>BufferPick<CR>")
 -- Move to previous/next
 bind("n", "<C-h>", ":bprev<CR>")
 bind("n", "<C-l>", ":bnext<CR>")
