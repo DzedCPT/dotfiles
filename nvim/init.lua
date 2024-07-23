@@ -371,7 +371,13 @@ change_theme(color_scheme)()
 
 local lspconfig = require("lspconfig")
 -- Enable language servers
-local servers = { "pylsp", "ccls", "gopls" }
+-- TODO: install these lsps, until I move to Mason
+local servers = {
+	"pylsp",
+	"clangd", -- clangd provides simpler completions than ccls
+	"gopls",
+	"lua_ls",
+}
 for _, lsp in ipairs(servers) do
 	lspconfig[lsp].setup({
 		-- on_attach = on_attach,
