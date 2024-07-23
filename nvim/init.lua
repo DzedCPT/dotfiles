@@ -697,32 +697,14 @@ bind("n", "<leader>j", ":HopWord<Cr>")
 bind("v", "<leader>l", "<cmd>:HopLine<Cr>")
 bind("v", "<leader>j", "<cmd>:HopWord<Cr>")
 
-require("snippy").setup({
-	-- mappings = {
-	--     is = {
-	--         ['<Tab>'] = 'expand_or_advance',
-	--         ['<S-Tab>'] = 'previous',
-	--     },
-	--     nx = {
-	--         ['<leader>x'] = 'cut_text',
-	--     },
-	-- },
-})
-local mappings = require("snippy.mapping")
-
--- TODO: Figure out these keymaps
-vim.keymap.set("i", "<Tab>", mappings.expand_or_advance("<Tab>"))
-vim.keymap.set("s", "<Tab>", mappings.next("<Tab>"))
--- vim.keymap.set({ 'i', 's' }, '<S-Tab>', mappings.previous('<S-Tab>'))
--- vim.keymap.set('x', '<Tab>', mappings.cut_text, { remap = true })
--- vim.keymap.set('n', 'g<Tab>', mappings.cut_text, { remap = true })
-
 require("statusline")
 
 bind("n", "<leader>r", ":source %<CR>")
 require("nvim-web-devicons").setup()
 require("nvim-rooter").setup()
 
+-- Snippy keybdings
+require("snippy").setup({})
 local mappings = require('snippy.mapping')
 vim.keymap.set('i', '<c-l>', mappings.expand_or_advance('<Tab>'))
 vim.keymap.set('s', '<c-l>', mappings.next('<Tab>'))
