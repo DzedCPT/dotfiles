@@ -662,10 +662,10 @@ function prev_hunk()
 	return "<Ignore>"
 end
 
-bind("v", "<C-n>", next_hunk, { expr = true })
-bind("v", "<C-p>", prev_hunk, { expr = true })
-bind("n", "<C-n>", next_hunk, { expr = true })
-bind("n", "<C-p>", prev_hunk, { expr = true })
+bind("v", "<leader>gj", next_hunk, { expr = true })
+bind("v", "<leader>gk", prev_hunk, { expr = true })
+bind("n", "<leader>gj", next_hunk, { expr = true })
+bind("n", "<leader>gk", prev_hunk, { expr = true })
 
 bind("n", "<leader>cc", "<Plug>(git-conflict-ours)")
 bind("n", "<leader>ci", "<Plug>(git-conflict-theirs)")
