@@ -647,7 +647,7 @@ function next_hunk()
 	end
 	vim.schedule(function()
 		gs.next_hunk()
-		vim.fn.feedkeys("zz")
+		vim.fn.feedkeys("zz", "n")
 	end)
 	return "<Ignore>"
 end
@@ -657,7 +657,7 @@ function prev_hunk()
 	end
 	vim.schedule(function()
 		gs.prev_hunk()
-		vim.fn.feedkeys("zz")
+		vim.fn.feedkeys("zz", "n")
 	end)
 	return "<Ignore>"
 end
