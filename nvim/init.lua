@@ -4,6 +4,9 @@
 -- Note: set ==> vim.opt.
 -- let ==> vim.g
 
+-- Hack to remove various warnings from the linter
+local vim = vim
+
 local function bind(mode, src, dest, opts)
 	opts = opts or { silent = true, noremap = true }
 	vim.keymap.set(mode, src, dest, opts)
