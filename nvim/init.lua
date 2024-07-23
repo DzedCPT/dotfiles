@@ -586,12 +586,12 @@ bind("n", "<leader>ef", format)
 -- Something to condsider in the future!
 -- vim.api.nvim_set_keymap("i", "<C-H>", 'copilot#Previous()', { silent = true, expr = true })
 -- vim.api.nvim_set_keymap("i", "<C-K>", 'copilot#Next()', { silent = true, expr = true })
+-- § is mapped to <c-i> by wezterm.
 vim.api.nvim_set_keymap("i", "§", 'copilot#Accept("<CR>")', { silent = true, expr = true })
 
 bind("n", "<leader>df", vim.diagnostic.open_float)
--- jump to next/prev diagnostic
-bind("n", "[d", vim.diagnostic.goto_prev)
-bind("n", "]d", vim.diagnostic.goto_next)
+bind("n", "<leader>dk", vim.diagnostic.goto_prev)
+bind("n", "<leader>dj", vim.diagnostic.goto_next)
 
 -- Show diagnostics in the quickfix list.
 bind("n", "<leader>dq", vim.diagnostic.setloclist)
