@@ -137,7 +137,6 @@ require("lazy").setup({
 			-- add any options here
 		},
 	},
-	-- {"kevinhwang91/nvim-bqf", ft="qf"},
 	-- Basic util plugins:
 	-- Always root the workdir
 	"DzedCPT/nvim-rooter",
@@ -602,7 +601,6 @@ bind("n", "<leader>b", function()
 	telescope_builtin.buffers({ ignore_current_buffer = true, sort_lastused = true })
 end)
 bind("n", "<leader>o", telescope_builtin.git_files)
-bind("n", "<leader>s", telescope_builtin.lsp_document_symbols)
 bind("n", "<leader>fo", telescope_builtin.find_files)
 bind("n", "<leader>ff", telescope_builtin.live_grep)
 bind("n", "<leader>s", telescope_builtin.lsp_document_symbols)
@@ -682,9 +680,6 @@ bind("n", "<leader>cl", ":GitConflictListQf<CR>")
 vim.api.nvim_create_user_command("Dark", change_theme("kanagawa-dragon"), { nargs = 0 })
 vim.api.nvim_create_user_command("Light", change_theme("kanagawa-lotus"), { nargs = 0 })
 vim.api.nvim_create_user_command("Moon", change_theme("kanagawa-wave"), { nargs = 0 })
-
--- Formatter keybindings
-bind("n", "<leader>ef", ":Format<Cr>")
 
 -- Shortcuts for copying to system clipboard, works locally and on remote servers.
 bind("n", "<leader>y", require("osc52").copy_operator, { expr = true })
