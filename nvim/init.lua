@@ -141,7 +141,6 @@ require("lazy").setup({
 	-- Always root the workdir
 	"DzedCPT/nvim-rooter",
 	-- tab bar
-	"DzedCPT/mini.tabline",
 	-- Some icons to make things looks nicer:
 	"nvim-tree/nvim-web-devicons",
 	-- Add surround actions
@@ -252,8 +251,6 @@ require("lazy").setup({
 -- ================================================================================
 -- Configure Plugins
 -- ================================================================================
-
-require("mini.tabline").setup()
 
 require("mini.surround").setup(
 	-- This is the default config, but I changed the mappings.
