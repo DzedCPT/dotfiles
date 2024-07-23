@@ -689,10 +689,10 @@ bind("n", "<leader>yy", "<leader>y_", { remap = true })
 bind("v", "<leader>y", require("osc52").copy_visual)
 
 -- Neogit keybindings
-bind("n", "<leader>hh", ":Neogit<Cr>")
-bind("n", "<leader>hc", ":Neogit commit<Cr>")
-bind("n", "<leader>hp", ":Neogit pull<Cr>")
-bind("n", "<leader>hP", ":Neogit push<Cr>")
+bind("n", "<leader>gh", ":Neogit<Cr>")
+bind("n", "<leader>gc", ":Neogit commit<Cr>")
+bind("n", "<leader>gp", ":Neogit pull<Cr>")
+bind("n", "<leader>gP", ":Neogit push<Cr>")
 
 -- Simple hop config
 local hop = require("hop")
