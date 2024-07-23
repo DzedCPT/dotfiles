@@ -64,6 +64,14 @@ vim.opt.relativenumber = true
 -- This should help to fix that:
 vim.cmd("autocmd FileType netrw setl bufhidden=delete")
 
+-- Hide the quickfix list from the buffer list
+vim.cmd([[
+augroup qf
+    autocmd!
+    autocmd FileType qf set nobuflisted
+augroup END
+]])
+
 -- ================================================================================
 -- General Appearance
 -- ================================================================================
