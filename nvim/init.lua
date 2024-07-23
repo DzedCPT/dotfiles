@@ -692,7 +692,7 @@ bind("n", "<leader>yy", "<leader>y_", { remap = true })
 bind("v", "<leader>y", require("osc52").copy_visual)
 
 -- Neogit keybindings
-bind("n", "<leader>gh", ":Neogit<Cr>")
+bind("n", "<leader>gg", ":Neogit<Cr>")
 bind("n", "<leader>gc", ":Neogit commit<Cr>")
 bind("n", "<leader>gp", ":Neogit pull<Cr>")
 bind("n", "<leader>gP", ":Neogit push<Cr>")
