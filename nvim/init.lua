@@ -517,14 +517,13 @@ bind("v", "<S-Tab>", "<gv")
 -- Move back to previous buffer
 bind("n", "<Leader>a", ":b#<Cr>")
 
-bind("n", "<Leader>q", ":q<Cr>")
 bind("n", "<leader>w", ":bd<Cr>")
 -- Close all buffers apart from the current one
 bind("n", "<leader>W", ":%bd|e#|bd#<Cr>")
 
 -- Jump around the quickfix list
-bind("n", "[q", ":cprevious<Cr>")
-bind("n", "]q", ":cnext<Cr>")
+bind("n", "<leader>qj", ":cnext<Cr>")
+bind("n", "<leader>qk", ":cprevious<Cr>")
 
 -- Open File explorer
 bind("n", "<Leader>e", ":Ex<Cr>")
