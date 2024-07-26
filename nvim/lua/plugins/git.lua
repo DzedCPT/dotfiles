@@ -65,7 +65,7 @@ return {
 			{
 				"<leader>gb",
 				function()
-					gs().blame_line({ full = true })
+					require('gitsigns').blame_line({ full = true })
 				end,
 			},
 			{
@@ -83,7 +83,7 @@ return {
 			{
 				"<leader>gD",
 				function()
-					gs().diffthis("~")
+					require('gitsigns').diffthis("~")
 				end,
 			},
 			{ "<leader>gj", next_hunk, expr = true },
@@ -93,14 +93,14 @@ return {
 			{
 				"<leader>gs",
 				function()
-					gs().stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+					require('gitsigns').stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 				end,
 				mode = "v",
 			},
 			{
 				"<leader>gr",
 				function()
-					gs().reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+					require('gitsigns').reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
 				end,
 				mode = "v",
 			},
