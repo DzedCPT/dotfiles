@@ -119,7 +119,8 @@ return {
 			kind = "replace",
 			commit_editor = {
 				kind = "replace",
-				staged_diff_split_kind = "split_above"
+				-- Nice feature, but was giving me errors. TODO: Look into this.
+				show_staged_diff = false,
 			},
 			commit_select_view = {
 				kind = "replace",
