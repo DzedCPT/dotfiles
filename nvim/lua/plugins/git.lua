@@ -1,24 +1,20 @@
-local function gs()
-	return package.loaded.gitsigns
-end
-
-function next_hunk()
+local function next_hunk()
 	if vim.wo.diff then
 		return "]c"
 	end
 	vim.schedule(function()
-		gs().next_hunk()
+		package.loaded.gitsigns.next_hunk()
 		vim.fn.feedkeys("zz", "n")
 	end)
 	return "<Ignore>"
 end
 
-function prev_hunk()
+local function prev_hunk()
 	if vim.wo.diff then
 		return "[c"
 	end
 	vim.schedule(function()
-		gs().prev_hunk()
+		package.loaded.gitsigns.prev_hunk()
 		vim.fn.feedkeys("zz", "n")
 	end)
 	return "<Ignore>"
@@ -28,52 +24,136 @@ return {
 	{
 		"lewis6991/gitsigns.nvim",
 		opts = {},
+		lazy = false,
 		keys = {
-			{ "<leader>gs", gs().stage_hunk },
-			{ "<leader>gr", gs().reset_hunk },
-			{ "<leader>gS", gs().stage_buffer },
-			{ "<leader>gu", gs().undo_stage_hunk },
-			{ "<leader>gR", gs().reset_buffer },
-			{ "<leader>gp", gs().preview_hunk },
+			{
+				"<leader>gs",
+				function()
+					require("gitsigns").stage_hunk()
+				end,
+			},
+			{
+				"<leader>gr",
+				function()
+					require("gitsigns").reset_hunk()
+				end,
+			},
+			{
+				"<leader>gS",
+				function()
+					require("gitsigns").stage_buffer()
+				end,
+			},
+			{
+				"<leader>gu",
+				function()
+					require("gitsigns").undo_stage_hunk()
+				end,
+			},
+			{
+				"<leader>gR",
+				function()
+					require("gitsigns").reset_buffer()
+				end,
+			},
+			{
+				"<leader>gp",
+				function()
+					require("gitsigns").preview_hunk()
+				end,
+			},
 			{
 				"<leader>gb",
 				function()
 					gs().blame_line({ full = true })
 				end,
 			},
-			{ "<leader>gtb", gs().toggle_current_line_blame },
-			{ "<leader>gd", gs().diffthis },
+			{
+				"<leader>gtb",
+				function()
+					require("gitsigns").toggle_current_line_blame()
+				end,
+			},
+			{
+				"<leader>gd",
+				function()
+					require("gitsigns").diffthis()
+				end,
+			},
 			{
 				"<leader>gD",
 				function()
 					gs().diffthis("~")
 				end,
 			},
-			{ "<leader>gj", next_hunk, { expr = true } },
-			{ "<leader>gk", prev_hunk, { expr = true } },
-			{ "v", "<leader>gj", next_hunk, { expr = true } },
-			{ "v", "<leader>gk", prev_hunk, { expr = true } },
+			{ "<leader>gj", next_hunk, expr = true },
+			{ "<leader>gk", prev_hunk, expr = true },
+			{ "<leader>gj", next_hunk, mode = "v", expr = true },
+			{ "<leader>gk", prev_hunk, mode = "v", expr = true },
 			{
-				"v",
 				"<leader>gs",
 				function()
 					gs().stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 				end,
+				mode = "v",
 			},
 			{
-				"v",
-				"<leader>hr",
+				"<leader>gr",
 				function()
 					gs().reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
 				end,
+				mode = "v",
 			},
 		},
 	},
-	-- {
-	--                "NeogitOrg/neogit",
-	--                dependencies = {
-	--                        "nvim-lua/plenary.nvim", -- required
-	--                },
-	-- 			opts={},
-	-- 		}
+	{
+		"NeogitOrg/neogit",
+		dependencies = {
+			"nvim-lua/plenary.nvim", -- required
+		},
+		opts = {
+			-- By default open commit buffer in insert mode.
+			disable_insert_on_commit = true,
+			-- Make evertyhing open in a replace window.
+			-- floating could also be cool, but documentations says it's kinda buggy
+			kind = "replace",
+			commit_editor = {
+				kind = "replace",
+			},
+			commit_select_view = {
+				kind = "replace",
+			},
+			commit_view = {
+				kind = "replace",
+				verify_commit = os.execute("which gpg") == 0, -- Can be set to true or false, otherwise we try to find the binary
+			},
+			log_view = {
+				kind = "replace",
+			},
+			rebase_editor = {
+				kind = "replace",
+			},
+			reflog_view = {
+				kind = "replace",
+			},
+			merge_editor = {
+				kind = "replace",
+			},
+			tag_editor = {
+				kind = "replace",
+			},
+			preview_buffer = {
+				kind = "replace",
+			},
+			popup = {
+				kind = "replace",
+			},
+		},
+		keys = {
+			{"<leader>gg", ":Neogit<Cr>"},
+			{"<leader>gc", ":Neogit commit<Cr>"},
+			{"<leader>gp", ":Neogit pull<Cr>"},
+			{"<leader>gP", ":Neogit push<Cr>"},
+		}
+	},
 }
