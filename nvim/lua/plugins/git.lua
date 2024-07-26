@@ -119,6 +119,7 @@ return {
 			kind = "replace",
 			commit_editor = {
 				kind = "replace",
+				staged_diff_split_kind = "split_above"
 			},
 			commit_select_view = {
 				kind = "replace",
