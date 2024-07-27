@@ -6,7 +6,7 @@ return {
 	"nvim-telescope/telescope.nvim",
 	tag = "0.1.8",
 	dependencies = { "nvim-lua/plenary.nvim" },
-	lazy=false,
+	lazy=true,
 	opts={},
 	keys = {
 		{ "<leader>o", function() builtin().git_files() end },

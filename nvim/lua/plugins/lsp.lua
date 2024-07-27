@@ -17,6 +17,7 @@ local mason_ensure_intalled = {
 	"stylua",
 	"clang-format",
 	-- Debuggers
+	"debugpy"
 }
 
 return {
