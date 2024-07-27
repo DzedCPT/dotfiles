@@ -73,10 +73,10 @@ return {
 			vim.g.copilot_assume_mapped = true
 		end,
 		keys = {
-			{ "<c-k>", "copilot#Previous()", mode = "i", silent = true, expr = true },
-			{ "<c-j>", "copilot#Next()", mode = "i", silent = true, expr = true },
+			{ "<c-k>", "copilot#Previous()", mode = "i", silent = true, expr = true , replace_keycodes = false },
+			{ "<c-j>", "copilot#Next()", mode = "i", silent = true, expr = true , replace_keycodes = false },
 			-- § is mapped to <c-i> by wezterm.
-			{ "§", 'copilot#Accept("<CR>")', mode = "i", silent = true, expr = true },
+			{ "§", 'copilot#Accept("<CR>")', mode = "i", silent = true, expr = true , replace_keycodes = false },
 		},
 	},
 }
