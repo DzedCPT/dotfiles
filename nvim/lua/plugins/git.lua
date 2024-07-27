@@ -24,7 +24,7 @@ return {
 	{
 		"lewis6991/gitsigns.nvim",
 		opts = {},
-		lazy = false,
+		lazy=false,
 		keys = {
 			{
 				"<leader>gs",
@@ -109,13 +109,13 @@ return {
 	{
 		"NeogitOrg/neogit",
 		dependencies = {
-			"nvim-lua/plenary.nvim", -- required
+			"nvim-lua/plenary.nvim",
 		},
+		lazy=true,
 		opts = {
 			-- By default open commit buffer in insert mode.
 			disable_insert_on_commit = true,
-			-- Make evertyhing open in a replace window.
-			-- floating could also be cool, but documentations says it's kinda buggy
+			-- Make everything open in a replace window.
 			kind = "replace",
 			commit_editor = {
 				kind = "replace",
