@@ -24,8 +24,14 @@ require("lazy").setup({
     -- import your plugins
     { import = "plugins" },
   },
+  -- ZZZ: What to do about this?
+  change_detection = {
+    -- automatically check for config file changes and reload the ui
+    enabled = false,
+    notify = false, -- get a notification when changes are found
+  },
   rocks = {
-  -- Will need to set these to true if you want to use the lua package manager luarocks.
+  -- Set to true if you want to use the lua package manager luarocks.
   -- Currently I don't use any packages that require luarocks, so disable it to 
   -- avoid needing it as a dependency.
       enabled = false,
@@ -33,11 +39,13 @@ require("lazy").setup({
     },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
-  -- ZZZ
-  -- install = { colorscheme = { "habamax" } },
+  install = { colorscheme = { vim.g.colors_name } },
   -- Don't automatically check for plugin updates
   checker = { enabled = false },
 })
 
 require("keybindings")
+require("autocmds")
+require("cmds")
+require("statusline")
 

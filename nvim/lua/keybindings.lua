@@ -1,7 +1,4 @@
-local function bind(mode, src, dest, opts)
-        opts = opts or { silent = true, noremap = true }
-        vim.keymap.set(mode, src, dest, opts)
-end
+require("helpers")
 
 bind("i", "jk", "<Esc>")
 

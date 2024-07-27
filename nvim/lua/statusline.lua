@@ -1,5 +1,4 @@
 -- Custom statusline:
--- Inspired by: https://raw.githubusercontent.com/alacritty/alacritty/master/extra/promo/alacritty-readme.png
 -- Reference impl: https://github.com/VonHeikemen/nvim-starter/blob/xx-user-plugins/lua/user/statusline.lua
 
 function lsp_attached()
@@ -123,3 +122,4 @@ local statusline = {
 }
 
 vim.o.statusline = table.concat(statusline, "")
+

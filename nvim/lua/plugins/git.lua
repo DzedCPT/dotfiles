@@ -1,3 +1,6 @@
+-- Hack to remove various warnings from the linter
+local vim = vim
+
 local function next_hunk()
 	if vim.wo.diff then
 		return "]c"

@@ -34,6 +34,16 @@ return {
 			bind("n", "<leader>yy", "<leader>y_", { remap = true })
 		end,
 	},
-	{ "gbprod/substitute.nvim", opts = {} },
 	"machakann/vim-highlightedyank",
+	{
+		"gbprod/substitute.nvim",
+		opts={},
+		init = function()
+			local substitute = require("substitute")
+			bind("n", "s", substitute.operator, { noremap = true })
+			bind("n", "ss", substitute.line, { noremap = true })
+			bind("n", "S", substitute.eol, { noremap = true })
+			bind("x", "s", substitute.visual, { noremap = true })
+		end,
+	},
 }
