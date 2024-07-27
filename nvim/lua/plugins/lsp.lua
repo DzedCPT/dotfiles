@@ -1,19 +1,34 @@
 require("helpers")
-local servers = {
+local lsp_servers = {
 	"pylsp",
 	"ccls",
 	"gopls",
 	"lua_ls",
 }
 
+local mason_ensure_intalled = {
+	-- LSP servers
+	{ "python-lsp-server", version = "1.8.0" }, -- pylsp
+	-- "ccls",mason doesn't support installing ccls
+	"gopls",
+	"lua-language-server", -- lua_ls
+	-- Formatters
+	"black",
+	"stylua",
+	"clang-format",
+	-- Debuggers
+}
+
 return {
+	{ "williamboman/mason.nvim", opts = {} },
+	{ "WhoIsSethDaniel/mason-tool-installer", opts = { ensure_installed = mason_ensure_intalled } },
 	{
 		"neovim/nvim-lspconfig",
 		opts = {},
 		config = function()
 			local lspconfig = require("lspconfig")
 
-			for _, lsp in ipairs(servers) do
+			for _, lsp in ipairs(lsp_servers) do
 				lspconfig[lsp].setup({
 					-- on_attach = on_attach,
 					on_attach = function(client, bufnr)
