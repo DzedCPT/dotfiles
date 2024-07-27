@@ -6,9 +6,10 @@ return {
 	"nvim-telescope/telescope.nvim",
 	tag = "0.1.8",
 	dependencies = { "nvim-lua/plenary.nvim" },
+	lazy=false,
 	opts={},
 	keys = {
-		{ "<leader>o", builtin().git_files },
+		{ "<leader>o", function() builtin().git_files() end },
 		{
 			"<leader>b",
 			function()
@@ -17,14 +18,14 @@ return {
 		},
 		-- ZZZ: These should also work in visual mode!
 		-- ZZZ: Maybe this should be <c-o
-		{ "<leader>o", builtin().git_files },
-		{ "<leader>fo", builtin().find_files },
-		{ "<leader>ff", builtin().live_grep },
-		{ "<leader>s", builtin().lsp_document_symbols },
-		{ "<leader>fj", builtin().jumplist },
-		{ "<leader>fs", builtin().grep_string },
-		{ "<leader>fp", builtin().resume },
-		{ "<leader>fh", builtin().help_tags },
-		{ "<leader>fa", builtin().commands },
+		{ "<leader>o", function() builtin().git_files() end },
+		{ "<leader>fo", function() builtin().find_files() end },
+		{ "<leader>ff", function() builtin().live_grep() end },
+		{ "<leader>s", function() builtin().lsp_document_symbols() end },
+		{ "<leader>fj", function() builtin().jumplist() end },
+		{ "<leader>fs", function() builtin().grep_string() end },
+		{ "<leader>fp", function() builtin().resume() end },
+		{ "<leader>fh", function() builtin().help_tags() end },
+		{ "<leader>fa", function() builtin().commands() end },
 	},
 }
