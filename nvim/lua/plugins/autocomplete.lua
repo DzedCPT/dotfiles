@@ -1,4 +1,4 @@
-local function config()
+local function cmp_config()
 	local cmp = require("cmp")
 	cmp.setup({
 		snippet = {
@@ -33,7 +33,7 @@ end
 return {
 	{
 		"hrsh7th/nvim-cmp",
-		config = config,
+		config = cmp_config,
 		keys = {
 			{
 				"<c-l>",
