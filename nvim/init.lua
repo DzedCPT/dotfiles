@@ -48,4 +48,5 @@ require("keybindings")
 require("autocmds")
 require("cmds")
 require("statusline")
+require("diagnostic_display").setup()
 
