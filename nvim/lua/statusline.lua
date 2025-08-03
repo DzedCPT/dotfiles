@@ -2,7 +2,7 @@
 -- Reference impl: https://github.com/VonHeikemen/nvim-starter/blob/xx-user-plugins/lua/user/statusline.lua
 
 function lsp_attached()
-	for _, lsp_info in pairs(vim.lsp.buf_get_clients()) do
+	for _, lsp_info in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
 		if lsp_info["name"] ~= "copilot" then
 			return true
 		end

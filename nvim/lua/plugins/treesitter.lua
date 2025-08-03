@@ -42,6 +42,7 @@ return {
 				"vim",
 				"lua",
 				"markdown",
+				"kotlin",
 			},
 			sync_install = false,
 			highlight = { enable = true },

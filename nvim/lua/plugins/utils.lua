@@ -16,6 +16,19 @@ return {
 					},
 				},
 			},
+			overrides = function(colors)
+				local theme = colors.theme
+				return {
+					DiffAdd = { bg = theme.diff.add, fg = "NONE" },
+					DiffDelete = { bg = theme.diff.delete, fg = "NONE" },
+					DiffChange = { bg = theme.diff.change, fg = "NONE" },
+					DiffText = { bg = theme.syn.special1, fg = theme.ui.fg },
+					-- Git signs in gutter
+					GitSignsAdd = { fg = theme.vcs.added },
+					GitSignsChange = { fg = theme.vcs.changed },
+					GitSignsDelete = { fg = theme.vcs.removed },
+				}
+			end,
 		},
 		init = function()
 			local color_scheme = getDarkMode() == "Dark" and "kanagawa-lotus" or "kanagawa-dragon"

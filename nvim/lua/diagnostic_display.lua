@@ -2,7 +2,7 @@
 local M = {}
 
 local function lsp_attached()
-	for _, lsp_info in pairs(vim.lsp.buf_get_clients()) do
+	for _, lsp_info in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
 		if lsp_info["name"] ~= "copilot" then
 			return true
 		end
@@ -68,7 +68,7 @@ function M.show_diagnostic_at_cursor()
 end
 
 -- Setup autocmds for diagnostic display
-function M.setup()
+local function setup()
 	local augroup = vim.api.nvim_create_augroup("DiagnosticDisplay", { clear = true })
 	
 	-- Show diagnostic on cursor move
@@ -85,5 +85,8 @@ function M.setup()
 		end,
 	})
 end
+
+-- Auto-setup when module is required
+setup()
 
 return M

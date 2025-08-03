@@ -4,7 +4,28 @@ local lsp_servers = {
 	"ccls",
 	"gopls",
 	"lua_ls",
+	-- "kotlin_lsp",
 }
+
+vim.lsp.enable("kotlin_lsp")
+vim.lsp.config("kotlin_lsp", {
+	-- Server-specific settings. See `:help lsp-quickstart`
+	settings = {
+		["kotlin_lsp"] = {
+			filetypes = { "kotlin" },
+			cmd = { "kotlin-lsp", "--stdio" },
+			root_markers = {
+				"LICENSE.txt"
+				-- "settings.gradle", -- Gradle (multi-project)
+				-- "settings.gradle.kts", -- Gradle (multi-project)
+				-- "pom.xml", -- Maven
+				-- "build.gradle", -- Gradle
+				-- "build.gradle.kts", -- Gradle
+				-- "workspace.json", -- Used to integrate your own build system
+			},
+		},
+	},
+})
 
 local mason_ensure_intalled = {
 	-- LSP servers
@@ -17,7 +38,7 @@ local mason_ensure_intalled = {
 	"stylua",
 	"clang-format",
 	-- Debuggers
-	"debugpy"
+	"debugpy",
 }
 
 return {
@@ -54,6 +75,9 @@ return {
 						bind("n", "<leader>dk", vim.diagnostic.goto_prev, bufopts)
 						bind("n", "<leader>dj", vim.diagnostic.goto_next, bufopts)
 						bind("n", "<leader>dq", vim.diagnostic.setloclist)
+
+						-- Ctrl+click for go-to-definition
+						bind("n", "<C-LeftMouse>", ":lua vim.lsp.buf.definition()<Cr>zt", bufopts)
 					end,
 
 					-- Add additional capabilities supported by nvim-cmp
@@ -86,17 +110,20 @@ return {
 			})
 
 			-- Configure better diagnostic symbols in the side bar.
-			local signs = {
-				"Error",
-				"Warning",
-				"Hint",
-				"Information",
-			}
+			vim.api.nvim_create_autocmd("VimEnter", {
+				callback = function()
+					local signs = {
+						{ name = "DiagnosticSignError", text = "●" },
+						{ name = "DiagnosticSignWarn", text = "-" },
+						{ name = "DiagnosticSignHint", text = "●" },
+						{ name = "DiagnosticSignInfo", text = "●" },
+					}
 
-			for _, type in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = "⏺︎", texthl = hl, numhl = nil })
-			end
+					for _, sign in ipairs(signs) do
+						vim.fn.sign_define(sign.name, { text = sign.text, texthl = sign.name, numhl = nil })
+					end
+				end,
+			})
 		end,
 	},
 }
